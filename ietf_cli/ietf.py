@@ -6,6 +6,15 @@ from xdg import BaseDirectory
 
 
 def mirror(args):
+    # Define the URIs
+    uri = {'draft': 'rsync.ietf.org::internet-drafts',
+           'iana': 'rsync.ietf.org::everything-ftp/iana/',
+           'iesg': 'rsync.ietf.org::iesg-minutes/',
+           'charter': 'ietf.org::everything-ftp/ietf/',
+           'conflict': 'rsync.ietf.org::everything-ftp/conflict-reviews/',
+           'status': 'rsync.ietf.org::everything-ftp/status-changes/',
+           'rfc': 'ftp.rfc-editor.org::everything-ftp/in-notes/'}
+
     # Set the top-level mirror directory
     if args.dir is not None:
         mirror_dir = args.dir[0]
