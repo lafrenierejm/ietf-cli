@@ -26,14 +26,14 @@ def mirror(args):
 
     # Set the top-level mirror directory
     if args.dir is not None:
-        mirror_dir = args.dir[0]
+        top_dir = args.dir[0]
     else:
-        mirror_dir = BaseDirectory.save_data_path('ietf-cli')
-
-    if os.access(mirror_dir, os.W_OK | os.X_OK):
-        print('{} is writable'.format(mirror_dir))
-    else:
-        print('{} is not writable'.format(mirror_dir))
+        top_dir = BaseDirectory.save_data_path('ietf-cli')
+    # Attempt to create directory
+    try:
+        os.mkdir(top_dir)
+    except FileExistsError:
+        pass  # Directory already exists
 
 
 def main():
