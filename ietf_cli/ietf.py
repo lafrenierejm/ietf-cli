@@ -6,14 +6,23 @@ from xdg import BaseDirectory
 
 
 def mirror(args):
-    # Define the URIs
-    uri = {'draft': 'rsync.ietf.org::internet-drafts',
-           'iana': 'rsync.ietf.org::everything-ftp/iana/',
-           'iesg': 'rsync.ietf.org::iesg-minutes/',
-           'charter': 'ietf.org::everything-ftp/ietf/',
-           'conflict': 'rsync.ietf.org::everything-ftp/conflict-reviews/',
-           'status': 'rsync.ietf.org::everything-ftp/status-changes/',
-           'rfc': 'ftp.rfc-editor.org::everything-ftp/in-notes/'}
+    # The URIs for the document types
+    uris = {'charter': 'ietf.org::everything-ftp/ietf/',
+            'conflict': 'rsync.ietf.org::everything-ftp/conflict-reviews/',
+            'draft': 'rsync.ietf.org::internet-drafts',
+            'iana': 'rsync.ietf.org::everything-ftp/iana/',
+            'iesg': 'rsync.ietf.org::iesg-minutes/',
+            'rfc': 'ftp.rfc-editor.org::everything-ftp/in-notes/',
+            'status': 'rsync.ietf.org::everything-ftp/status-changes/'}
+    # Strings to be passed to rsync as arguments to `--exclude`
+    excludes = {'charter': [],
+                'conflict': [],
+                'draft': ['*.xml', '*.pdf'],
+                'iana': [],
+                'iesg': [],
+                'rfc': ['tar*', 'search*', 'PDF-RFC*', 'tst/', 'pdfrfc/',
+                        'internet-drafts/', 'ien/'],
+                'status': []}
 
     # Set the top-level mirror directory
     if args.dir is not None:
