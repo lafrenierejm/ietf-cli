@@ -1,5 +1,21 @@
 #!/usr/bin/env python3
 import argparse
+import os
+
+from xdg import BaseDirectory
+
+
+def mirror(args):
+    # Set the top-level mirror directory
+    if args.dir is not None:
+        mirror_dir = args.dir[0]
+    else:
+        mirror_dir = BaseDirectory.save_data_path('ietf-cli')
+
+    if os.access(mirror_dir, os.W_OK | os.X_OK):
+        print('{} is writable'.format(mirror_dir))
+    else:
+        print('{} is not writable'.format(mirror_dir))
 
 
 def main():
