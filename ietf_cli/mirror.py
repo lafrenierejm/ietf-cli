@@ -25,11 +25,10 @@ def mirror(args):
                 'status': []}
 
     # Set the top-level mirror directory
-    if args.dir is not None:
-        top_dir = os.path.expandvars(os.path.expanduser(args.dir[0]))
-    else:
-        top_dir = BaseDirectory.save_data_path('ietf-cli')
-    top_dir = os.path.abspath(top_dir)
+    top_dir = os.path.abspath(
+        os.path.expandvars(
+            os.path.expanduser(
+                args.dir[0])))
     # Attempt to create directory
     try:
         os.makedirs(top_dir)

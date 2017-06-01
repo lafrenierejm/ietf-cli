@@ -3,6 +3,7 @@ import argparse
 import os
 
 from mirror import mirror
+from xdg import BaseDirectory
 
 
 def main():
@@ -19,8 +20,8 @@ def main():
         '-d', '--dir',
         type=str,
         nargs=1,  # exactly 1 argument
-        default=None,
-        help='manually specify a directory to download to')
+        default=BaseDirectory.save_data_path('ietf-cli'),
+        help='where to download local mirror')
     parser_mirror.add_argument(
         '-t', '--type',
         type=str,
