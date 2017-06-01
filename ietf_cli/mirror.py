@@ -4,18 +4,15 @@ import os
 from xdg import BaseDirectory
 from subprocess import Popen
 
-
-def mirror(args):
-    # The URIs for the document types
-    uris = {'charter': 'ietf.org::everything-ftp/ietf/',
+URI_DICT = {'charter': 'ietf.org::everything-ftp/ietf/',
             'conflict': 'rsync.ietf.org::everything-ftp/conflict-reviews/',
             'draft': 'rsync.ietf.org::internet-drafts',
             'iana': 'rsync.ietf.org::everything-ftp/iana/',
             'iesg': 'rsync.ietf.org::iesg-minutes/',
             'rfc': 'ftp.rfc-editor.org::everything-ftp/in-notes/',
             'status': 'rsync.ietf.org::everything-ftp/status-changes/'}
-    # Strings to be passed to rsync as arguments to `--exclude`
-    excludes = {'charter': [],
+
+EXCLUDE_DICT = {'charter': [],
                 'conflict': [],
                 'draft': ['*.xml', '*.pdf'],
                 'iana': [],
@@ -24,6 +21,8 @@ def mirror(args):
                         'internet-drafts/', 'ien/'],
                 'status': []}
 
+
+def mirror(args):
     # Set the top-level mirror directory
     top_dir = os.path.abspath(
         os.path.expandvars(
@@ -39,9 +38,9 @@ def mirror(args):
     if args.type is None:
         # Generate a dict of command arrays from the above dicts
         commands = {}
-        for doc_type, uri in uris.items():
+        for doc_type, uri in URI_DICT.items():
             command = ['rsync', '-az', '--delete-during']
-            for exclude in excludes[doc_type]:
+            for exclude in EXCLUDE_DICT[doc_type]:
                 command.append("--exclude='{}'".format(exclude))
             command.append(uri)
             command.append(top_dir + '/' + doc_type)
@@ -65,9 +64,9 @@ def mirror(args):
         commands = {}
         for doc_type in args.type:
             command = ['rsync', '-az', '--delete-during']
-            for exclude in excludes[doc_type]:
+            for exclude in EXCLUDE_DICT[doc_type]:
                 command.append("--exclude='{}'".format(exclude))
-            command.append(uris[doc_type])
+            command.append(URI_DICT[doc_type])
             command.append(top_dir + '/' + doc_type)
             print(command)
             commands[doc_type] = command
