@@ -12,7 +12,7 @@ def main():
                                        help='subcommand help')
     subparsers.required = True  # Require a subcommand
 
-    # Create the parser for the `mirror` command
+    # Create the parser for the mirror subcommand
     parser_mirror = subparsers.add_parser(
         'mirror',
         help='update a local mirror')
