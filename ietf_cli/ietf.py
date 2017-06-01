@@ -74,32 +74,38 @@ def mirror(args):
 
 
 def main():
-    cli_parser = argparse.ArgumentParser()
-    cli_subparsers = cli_parser.add_subparsers(dest='subcommand',
-                                               help='subcommand help')
-    cli_subparsers.required = True  # Require a subcommand
+    parser = argparse.ArgumentParser()
+    subparsers = parser.add_subparsers(dest='subcommand',
+                                       help='subcommand help')
+    subparsers.required = True  # Require a subcommand
 
     # Create the parser for the `mirror` command
-    cli_parser_mirror = cli_subparsers.add_parser('mirror',
-                                                  help='update a local mirror')
-    cli_parser_mirror.add_argument('-d', '--dir',
-                                   type=str,
-                                   nargs=1,
-                                   default=None,
-                                   help='directory to download to')
-    cli_parser_mirror.add_argument('-t', '--type',
-                                   type=str,
-                                   nargs='+',
-                                   choices=['draft',
-                                            'iana',
-                                            'iesg',
-                                            'charter',
-                                            'status',
-                                            'rfc'],
-                                   default='everything',
-                                   help='type(s) of files to download')
+    parser_mirror = subparsers.add_parser(
+        'mirror',
+        help='update a local mirror')
+    parser_mirror.add_argument(
+        '-d', '--dir',
+        type=str,
+        nargs=1,  # exactly 1 argument
+        default=None,
+        help='manually specify a directory to download to')
+    parser_mirror.add_argument(
+        '-t', '--type',
+        type=str,
+        nargs='+',  # 1 or more arguments
+        choices=['draft',
+                 'iana',
+                 'iesg',
+                 'charter',
+                 'conflict',
+                 'status',
+                 'rfc'],
+        default=None,
+        help='type(s) of files to download')
+    parser_mirror.set_defaults(func=mirror)
 
-    cli_args = cli_parser.parse_args()
+    args = parser.parse_args()
+    args.func(args)
 
 
 if __name__ == '__main__':
