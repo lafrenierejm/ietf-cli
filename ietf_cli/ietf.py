@@ -21,7 +21,11 @@ def main():
         type=str,
         nargs=1,  # exactly 1 argument
         default=BaseDirectory.save_data_path('ietf-cli'),
-        help='where to download local mirror')
+        help='top-level destination of local mirror')
+    parser_mirror.add_argument(
+        '--flat',
+        action='store_true',
+        help='do not create a subdirectory for each document type')
     parser_mirror.add_argument(
         '-t', '--type',
         type=str,
@@ -34,7 +38,7 @@ def main():
                  'status',
                  'rfc'],
         default=None,
-        help='type(s) of files to download')
+        help='type of documents to download')
     parser_mirror.set_defaults(func=mirror)
 
     args = parser.parse_args()

@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 import os
 
+import typing
+from typing import List
+
 from xdg import BaseDirectory
 from subprocess import Popen
 
@@ -22,63 +25,62 @@ EXCLUDE_DICT = {'charter': [],
                 'status': []}
 
 
+def _expand_path(path: int) -> str:
+    return os.path.expandvars(os.path.expanduser(path))
+
+
+def _create_dir(path: str):
+    try:
+        os.makedirs(path)
+    except FileExistsError:
+        pass
+
+
+def assemble_rsync(doc_type: str, top_dir: int, flat: bool) -> List[str]:
+    # Add the rsync boilerplate
+    command = ['rsync', '-az', '--delete-during']
+
+    # Add any relevant `--exclude` strings
+    for exclude in EXCLUDE_DICT[doc_type]:
+        command.append("--exclude='{}'".format(exclude))
+
+    # Add the type's corresponding URI
+    command.append(URI_DICT[doc_type])
+
+    # Specify the output directory
+    if not flat:
+        dest_dir = top_dir + '/' + doc_type
+        _create_dir(dest_dir)
+        command.append(dest_dir)
+    else:
+        command.append(top_dir)
+
+    return command
+
+
 def mirror(args):
     # Set the top-level mirror directory
-    top_dir = os.path.abspath(
-        os.path.expandvars(
-            os.path.expanduser(
-                args.dir[0])))
+    top_dir = _expand_path(args.dir[0])
     # Attempt to create directory
-    try:
-        os.makedirs(top_dir)
-    except FileExistsError:
-        pass  # Directory already exists
+    _create_dir(top_dir)
 
+    # Dictionary to hold the commands
+    commands = {}
     # No document type passed as an argument
     if args.type is None:
-        # Generate a dict of command arrays from the above dicts
-        commands = {}
-        for doc_type, uri in URI_DICT.items():
-            command = ['rsync', '-az', '--delete-during']
-            for exclude in EXCLUDE_DICT[doc_type]:
-                command.append("--exclude='{}'".format(exclude))
-            command.append(uri)
-            command.append(top_dir + '/' + doc_type)
-            print(command)
-            commands[doc_type] = command
-        processes = []
-        for doc_type, command in commands.items():
-            # Create subdirectory for the document type
-            try:
-                os.makedirs(top_dir + '/' + doc_type)
-            except FileExistsError:  # Directory already exists
-                pass
-            # Start the rsync process and add its PID to processes
-            process = Popen(command)
-            processes.append(process)
-        # Wait for each rsync process to complete
-        exitcodes = [p.wait() for p in processes]
+        for doc_type, _ in URI_DICT.items():
+            commands[doc_type] = assemble_rsync(doc_type, top_dir, args.flat)
     # One or multiple document types passed as arguments
     else:
-        # Generate a dict of command arrays
-        commands = {}
         for doc_type in args.type:
-            command = ['rsync', '-az', '--delete-during']
-            for exclude in EXCLUDE_DICT[doc_type]:
-                command.append("--exclude='{}'".format(exclude))
-            command.append(URI_DICT[doc_type])
-            command.append(top_dir + '/' + doc_type)
-            print(command)
-            commands[doc_type] = command
-        processes = []
-        for doc_type, command in commands.items():
-            # Create subdirectory for the document type
-            try:
-                os.makedirs(top_dir + '/' + doc_type)
-            except FileExistsError:  # Directory already exists
-                pass
-            # Start the rsync process and add its PID to processes
-            process = Popen(command)
-            processes.append(process)
-        # Wait for each rsync process to complete
-        exitcodes = [p.wait() for p in processes]
+            commands[doc_type] = assemble_rsync(doc_type, top_dir, args.flat)
+
+    # List to hold the spawned processes' IDs
+    processes = []
+    for doc_type, command in commands.items():
+        # Start the rsync process and add its PID to processes
+        process = Popen(command)
+        processes.append(process)
+
+    # Wait for each rsync process to complete
+    exitcodes = [p.wait() for p in processes]
