@@ -2,27 +2,27 @@
 import os
 
 import typing
-from typing import List
+from typing import List, Tuple
 
 from xdg import BaseDirectory
 from subprocess import Popen
 
-URI_DICT = {'charter': 'ietf.org::everything-ftp/ietf/',
-            'conflict': 'rsync.ietf.org::everything-ftp/conflict-reviews/',
-            'draft': 'rsync.ietf.org::internet-drafts',
-            'iana': 'rsync.ietf.org::everything-ftp/iana/',
-            'iesg': 'rsync.ietf.org::iesg-minutes/',
-            'rfc': 'ftp.rfc-editor.org::everything-ftp/in-notes/',
-            'status': 'rsync.ietf.org::everything-ftp/status-changes/'}
+__URI_DICT__ = {'charter': 'ietf.org::everything-ftp/ietf/',
+                'conflict': 'rsync.ietf.org::everything-ftp/conflict-reviews/',
+                'draft': 'rsync.ietf.org::internet-drafts',
+                'iana': 'rsync.ietf.org::everything-ftp/iana/',
+                'iesg': 'rsync.ietf.org::iesg-minutes/',
+                'rfc': 'ftp.rfc-editor.org::everything-ftp/in-notes/',
+                'status': 'rsync.ietf.org::everything-ftp/status-changes/'}
 
-EXCLUDE_DICT = {'charter': [],
-                'conflict': [],
-                'draft': ['*.xml', '*.pdf'],
-                'iana': [],
-                'iesg': [],
-                'rfc': ['tar*', 'search*', 'PDF-RFC*', 'tst/', 'pdfrfc/',
-                        'internet-drafts/', 'ien/'],
-                'status': []}
+__EXCLUDE_DICT__ = {'charter': [],
+                    'conflict': [],
+                    'draft': ['*.xml', '*.pdf'],
+                    'iana': [],
+                    'iesg': [],
+                    'rfc': ['tar*', 'search*', 'PDF-RFC*', 'tst/', 'pdfrfc/',
+                            'internet-drafts/', 'ien/'],
+                    'status': []}
 
 
 def _expand_path(path: int) -> str:
@@ -36,26 +36,26 @@ def _create_dir(path: str):
         pass
 
 
-def assemble_rsync(doc_type: str, top_dir: int, flat: bool) -> List[str]:
+RsyncInfo = Tuple[List[str], str]
+def assemble_rsync(doc_type: str, top_dir: int, flat: bool) -> RsyncInfo:
     # Add the rsync boilerplate
     command = ['rsync', '-az', '--delete-during']
 
     # Add any relevant `--exclude` strings
-    for exclude in EXCLUDE_DICT[doc_type]:
+    for exclude in __EXCLUDE_DICT__[doc_type]:
         command.append("--exclude='{}'".format(exclude))
 
     # Add the type's corresponding URI
-    command.append(URI_DICT[doc_type])
+    command.append(__URI_DICT__[doc_type])
 
     # Specify the output directory
     if not flat:
         dest_dir = top_dir + '/' + doc_type
-        _create_dir(dest_dir)
-        command.append(dest_dir)
     else:
-        command.append(top_dir)
+        dest_dir = top_dir
+    command.append(dest_dir)
 
-    return command
+    return command, dest_dir
 
 
 def mirror(args):
@@ -68,12 +68,16 @@ def mirror(args):
     commands = {}
     # No document type passed as an argument
     if args.type is None:
-        for doc_type, _ in URI_DICT.items():
-            commands[doc_type] = assemble_rsync(doc_type, top_dir, args.flat)
+        for doc_type, _ in __URI_DICT__.items():
+            commands[doc_type], dest_dir = assemble_rsync(
+                doc_type, top_dir, args.flat)
+            _create_dir(dest_dir)
     # One or multiple document types passed as arguments
     else:
         for doc_type in args.type:
-            commands[doc_type] = assemble_rsync(doc_type, top_dir, args.flat)
+            commands[doc_type], dest_dir = assemble_rsync(
+                doc_type, top_dir, args.flat)
+            _create_dir(dest_dir)
 
     # List to hold the spawned processes' IDs
     processes = []
