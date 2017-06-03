@@ -46,6 +46,18 @@ class TestAssembleRsync(unittest.TestCase):
             self.assertEqual(expected_cmd, returned_cmd)
             self.assertEqual(expected_path, returned_path)
 
+    def test_assemble_rsync_flat(self):
+        expected_path = '/sample/path'
+        for doc_type, cmd_array in self.rsync_no_path:
+
+            expected_cmd = cmd_array + [expected_path]
+
+            returned_cmd, returned_path = assemble_rsync(doc_type,
+                                                         expected_path, True)
+
+            self.assertEqual(expected_cmd, returned_cmd)
+            self.assertEqual(expected_path, returned_path)
+
 
 if __name__ == '__main__':
     unittest.main()
