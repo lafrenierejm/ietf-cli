@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 from typing import List, Dict
 import xml.etree.ElementTree
-from .enum import DocumentType
+from .enum import DocumentType, Month
 
 NAMESPACE = {'index': 'http://www.rfc-editor.org/rfc-index'}
 
@@ -74,3 +74,41 @@ def find_author(entry: xml.etree.ElementTree.Element) -> List[Dict[str, str]]:
         authors.append(author)
 
     return authors
+
+
+def find_date(entry: xml.etree.ElementTree.Element) -> Dict[str, int]:
+    """Return a dict containing `entry`'s publication date.
+
+    The dict's keys are 'year', 'month', and 'day'.
+    - 'year' is a integer year from the Gregorian calendar
+    (https://www.w3.org/TR/2001/REC-xmlschema-2-20010502/#gYear).
+    - 'month' is an integer in the range [1,12].
+    - 'day' is the day of the month.  Its value is either an integer in the
+    range [0,31] or None.
+    """
+    date_entry = entry.find('index:date', NAMESPACE)
+    date = {}
+
+    # Set date's year
+    year_str = date_entry.find('index:year', NAMESPACE).text
+    date['year'] = int(year_str)
+
+    # Set date's month
+    month_str = date_entry.find('index:month', NAMESPACE).text
+    month = Month[month_str].value
+    date['month'] = month
+
+    # Set date's day of the month, which is not guaranteed to exist
+    ## Attempt to get the text from inside the XML day tag
+    try:
+        day_str = date_entry.find('index:day', NAMESPACE).text
+    except AttributeError:
+        day = None
+    except:
+        raise
+    ## If there was no exception convert the retrieved str to an int
+    else:
+        day = int(day_str)
+    date['day'] = day
+
+    return date

@@ -95,6 +95,21 @@ class TestParse(unittest.TestCase):
             authors[2]['org_abbrev']
         )
 
+    def test_find_date(self):
+        date = parse.find_date(self.entries[0])
+
+        self.assertIsNone(
+            date['day']
+        )
+        self.assertEqual(
+            5,
+            date['month']
+        )
+        self.assertEqual(
+            2017,
+            date['year']
+        )
+
 
 if __name__ == '__main__':
     unittest.main()
