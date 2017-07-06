@@ -10,3 +10,10 @@ def findall(root: xml.etree.ElementTree.Element, doc_type: DocumentType) -> List
     """Return a list of all entries of type `doc_type`."""
     return root.findall('index:{}-entry'.format(doc_type.value.lower()),
                         NAMESPACE)
+
+
+def find_doc_id(entry: xml.etree.ElementTree.Element) -> int:
+    """Retrieve the numerical part of `entry`'s ID"""
+    doc_id = entry.find('index:doc-id', NAMESPACE).text
+    # Strip the three DocumentType letters off the ID
+    return int(doc_id[3:])

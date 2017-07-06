@@ -24,6 +24,11 @@ class TestParse(unittest.TestCase):
     def test_findall(self):
         self.assertEqual(3, len(self.entries))
 
+    def test_find_doc_id(self):
+        self.assertEqual(8180, parse.find_doc_id(self.entries[0]))
+        self.assertEqual(10, parse.find_doc_id(self.entries[1]))
+        self.assertEqual(8174, parse.find_doc_id(self.entries[2]))
+
 
 if __name__ == '__main__':
     unittest.main()
