@@ -44,6 +44,57 @@ class TestParse(unittest.TestCase):
             parse.find_title(self.entries[2])
         )
 
+    def test_find_author(self):
+        authors = parse.find_author(self.entries[0])
+
+        # name
+        self.assertEqual(
+            'X. Vilajosana',
+            authors[0]['name']
+        )
+        self.assertEqual(
+            'K. Pister',
+            authors[1]['name']
+        )
+        self.assertEqual(
+            'T. Watteyne',
+            authors[2]['name']
+        )
+
+        # title
+        self.assertEqual(
+            'Editor',
+            authors[0]['title']
+        )
+        self.assertIsNone(
+            authors[1]['title']
+        )
+        self.assertIsNone(
+            authors[2]['title']
+        )
+
+        # organization
+        self.assertIsNone(
+            authors[0]['organization']
+        )
+        self.assertIsNone(
+            authors[1]['organization']
+        )
+        self.assertIsNone(
+            authors[2]['organization']
+        )
+
+        # org-abbrev
+        self.assertIsNone(
+            authors[0]['org_abbrev']
+        )
+        self.assertIsNone(
+            authors[1]['org_abbrev']
+        )
+        self.assertIsNone(
+            authors[2]['org_abbrev']
+        )
+
 
 if __name__ == '__main__':
     unittest.main()
