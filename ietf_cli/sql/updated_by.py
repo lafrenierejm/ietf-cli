@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from ietf_cli.sql.base import Base
-from ietf_cli.sql.index_enum import DocumentType
+from ietf_cli.xml.enum import DocumentType
 from sqlalchemy import Column, Enum, Integer, ForeignKey
 from sqlalchemy.orm import relationship
 
