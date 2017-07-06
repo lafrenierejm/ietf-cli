@@ -181,3 +181,13 @@ def find_draft(entry: xml.etree.ElementTree.Element) -> str:
         return draft.text
     else:
         return None
+
+
+def find_notes(entry: xml.etree.ElementTree.Element) -> str:
+    """Return the `notes` element of `entry`."""
+    notes = entry.find('index:notes', NAMESPACE)
+
+    if notes is not None:
+        return notes.text
+    else:
+        return None

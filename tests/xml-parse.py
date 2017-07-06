@@ -168,6 +168,19 @@ class TestParse(unittest.TestCase):
             parse.find_draft(self.entries[2])
         )
 
+    def test_find_notes(self):
+        self.assertIsNone(  # RFC 8180
+            parse.find_notes(self.entries[0])
+        )
+
+        self.assertIsNone(  # RFC 0010
+            parse.find_notes(self.entries[1])
+        )
+
+        self.assertIsNone(  # RFC 8174
+            parse.find_notes(self.entries[2])
+        )
+
 
 if __name__ == '__main__':
     unittest.main()
