@@ -215,3 +215,25 @@ def find_obsoletes(entry: xml.etree.ElementTree.Element) -> List[DocId]:
             doc_ids.append((doc_type, doc_id))
 
     return doc_ids
+
+
+def find_obsoleted_by(entry: xml.etree.ElementTree.Element) -> List[DocId]:
+    """Return a list of binary tuples representing the documents that `entry`
+    is obsoleted by.
+
+    The first element of the tuple is a DocumentType.
+    The second element is an integer.
+    """
+
+    found_entry = entry.find('index:obsoleted-by', NAMESPACE)
+
+    doc_ids = []
+    if found_entry is not None:
+        obsoleted_by = found_entry.findall('index:doc-id', NAMESPACE)
+        for by in obsoleted_by:
+            text = by.text  # Get the content of a doc-id element
+            doc_type = DocumentType[text[0:3]]
+            doc_id = int(text[3:])
+            doc_ids.append((doc_type, doc_id))
+
+    return doc_ids
