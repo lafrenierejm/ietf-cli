@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from ietf_cli.sql.abstract import Abstract
 from ietf_cli.sql.author import Author
 from ietf_cli.sql.base import Base
 from ietf_cli.sql.file_format import FileFormat
@@ -26,7 +27,8 @@ class Rfc(Base):
     formats = relationship('FileFormat', order_by=FileFormat.id,
                            back_populates='rfc')
     keywords = Column(String)
-    abstract = Column(String)
+    abstract = relationship('Abstract', order_by=Abstract.id,
+                            back_populates='rfc')
     draft = Column(String)
     notes = Column(String)
     obsoletes = relationship('Obsoletes', order_by=Obsoletes.id,

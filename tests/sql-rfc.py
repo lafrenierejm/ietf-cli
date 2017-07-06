@@ -8,6 +8,7 @@ from sqlalchemy.orm import sessionmaker
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 try:
+    from ietf_cli.sql.abstract import Abstract
     from ietf_cli.sql.author import Author
     from ietf_cli.sql.base import Base
     from ietf_cli.sql.file_format import FileFormat
@@ -39,7 +40,6 @@ class TestRfc(unittest.TestCase):
         self.rfc0002 = Rfc(id=2, title='title for RFC 2',
                            date_month=2, date_year=2,
                            keywords='keywords for RFC 2',
-                           abstract='abstract for RFC 2',
                            draft='draft for RFC 2',
                            notes='notes for RFC 2',
                            current_status=Status.UNKNOWN,
@@ -50,6 +50,34 @@ class TestRfc(unittest.TestCase):
                            errata_url='errata_url for RFC 2',
                            doi='doi for RFC 2')
         self.session.add(self.rfc0002)
+
+    def test_abstract(self):
+        self.assertEqual(0, len(self.rfc0001.abstract))  # no abstract
+        self.assertEqual(0, len(self.rfc0002.abstract))  # no abstract
+
+        # Add abstract information to the RFCs
+        self.rfc0001.abstract = [Abstract(par='Abstract 1 for RFC 1')]
+        self.rfc0002.abstract = [Abstract(par='Abstract 1 for RFC 2'),
+                                 Abstract(par='Abstract 2 for RFC 2')]
+        self.session.add(self.rfc0001)  # add the changes made to rfc0001
+        self.session.add(self.rfc0002)  # add the changes made to rfc0002
+        self.session.commit()  # commit the added changes
+
+        # Check the DB's copy of rfc0001
+        self.rfc0001_query = self.session.query(Rfc).\
+            filter_by(id=1).one()
+        self.assertEqual(1, len(self.rfc0001_query.abstract))
+        self.assertEqual('Abstract 1 for RFC 1',
+                         self.rfc0001_query.abstract[0].par)
+
+        # Check the DB's copy of rfc0002
+        self.rfc0002_query = self.session.query(Rfc).\
+            filter_by(id=2).one()
+        self.assertEqual(2, len(self.rfc0002_query.abstract))
+        self.assertEqual('Abstract 1 for RFC 2',
+                         self.rfc0002_query.abstract[0].par)
+        self.assertEqual('Abstract 2 for RFC 2',
+                         self.rfc0002_query.abstract[1].par)
 
     def test_authors(self):
         self.assertEqual(0, len(self.rfc0001.authors))  # before adding authors
