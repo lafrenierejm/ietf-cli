@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 from typing import List, Dict, Tuple
 import xml.etree.ElementTree
-from .enum import DocumentType, FileType, Month
+from .enum import DocumentType, FileType, Month, Status
 
 NAMESPACE = {'index': 'http://www.rfc-editor.org/rfc-index'}
 
 DocId = Tuple[DocumentType, int]
-
 
 def findall(root: xml.etree.ElementTree.Element, doc_type: DocumentType) -> List[xml.etree.ElementTree.Element]:
     """Return a list of all entries of type `doc_type`."""
@@ -327,3 +326,8 @@ def find_see_also(entry: xml.etree.ElementTree.Element) -> List[DocId]:
             doc_ids.append((doc_type, doc_num))
 
     return doc_ids
+
+
+def find_current_status(entry: xml.etree.ElementTree.Element) -> Status:
+    """Return `entry`'s current status."""
+    return Status(entry.find('index:current-status', NAMESPACE).text)
