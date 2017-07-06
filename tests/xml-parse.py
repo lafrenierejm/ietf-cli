@@ -96,19 +96,20 @@ class TestParse(unittest.TestCase):
         )
 
     def test_find_date(self):
-        date = parse.find_date(self.entries[0])
+        year, month, day = parse.find_date(self.entries[0])  # 8180
+        self.assertEqual(2017, year)
+        self.assertEqual(5, month)
+        self.assertIsNone(day)
 
-        self.assertIsNone(
-            date['day']
-        )
-        self.assertEqual(
-            5,
-            date['month']
-        )
-        self.assertEqual(
-            2017,
-            date['year']
-        )
+        year, month, day = parse.find_date(self.entries[1])  # 0010
+        self.assertEqual(1969, year)
+        self.assertEqual(7, month)
+        self.assertIsNone(day)
+
+        year, month, day = parse.find_date(self.entries[1])  # 8174
+        self.assertEqual(2017, year)
+        self.assertEqual(5, month)
+        self.assertEqual(1, day)
 
     def test_find_format(self):
         forms = parse.find_format(self.entries[0])

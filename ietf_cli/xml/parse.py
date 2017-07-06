@@ -77,10 +77,10 @@ def find_author(entry: xml.etree.ElementTree.Element) -> List[Dict[str, str]]:
     return authors
 
 
-def find_date(entry: xml.etree.ElementTree.Element) -> Dict[str, int]:
-    """Return a dict containing `entry`'s publication date.
+def find_date(entry: xml.etree.ElementTree.Element) -> Tuple[int, int, int]:
+    """Return a triplet containing `entry`'s publication date.
 
-    The dict's keys are 'year', 'month', and 'day'.
+    The triplet's elements are as follows:
     - 'year' is a integer year from the Gregorian calendar
     (https://www.w3.org/TR/2001/REC-xmlschema-2-20010502/#gYear).
     - 'month' is an integer in the range [1,12].
@@ -88,16 +88,13 @@ def find_date(entry: xml.etree.ElementTree.Element) -> Dict[str, int]:
     range [0,31] or None.
     """
     date_entry = entry.find('index:date', NAMESPACE)
-    date = {}
 
     # Set date's year
-    year_str = date_entry.find('index:year', NAMESPACE).text
-    date['year'] = int(year_str)
+    year = int(date_entry.find('index:year', NAMESPACE).text)
 
     # Set date's month
     month_str = date_entry.find('index:month', NAMESPACE).text
     month = Month[month_str].value
-    date['month'] = month
 
     # Set date's day of the month, which is not guaranteed to exist
     ## Attempt to get the text from inside the XML day tag
@@ -110,9 +107,8 @@ def find_date(entry: xml.etree.ElementTree.Element) -> Dict[str, int]:
     ## If there was no exception convert the retrieved str to an int
     else:
         day = int(day_str)
-    date['day'] = day
 
-    return date
+    return (year, month, day)
 
 
 def find_format(entry: xml.etree.ElementTree.Element) -> List[Tuple[FileType,
