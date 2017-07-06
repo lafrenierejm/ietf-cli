@@ -442,6 +442,36 @@ class TestParse(unittest.TestCase):
             doc_ids[0][1]
         )
 
+    def test_find_see_also(self):
+        doc_ids = parse.find_see_also(self.entries[0])  # RFC 8180
+        # There is 1 reference
+        self.assertEqual(
+            1,
+            len(doc_ids)
+        )
+        self.assertEqual(
+            parse.DocumentType.BCP,
+            doc_ids[0][0]
+        )
+        self.assertEqual(
+            0,
+            doc_ids[0][1]
+        )
+
+        doc_ids = parse.find_see_also(self.entries[1])  # RFC 0010
+        # There are no references
+        self.assertEqual(
+            [],
+            doc_ids
+        )
+
+        doc_ids = parse.find_see_also(self.entries[1])  # RFC 8174
+        # There are no references
+        self.assertEqual(
+            [],
+            doc_ids
+        )
+
 
 if __name__ == '__main__':
     unittest.main()
