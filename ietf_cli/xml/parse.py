@@ -5,6 +5,8 @@ from .enum import DocumentType, FileType, Month
 
 NAMESPACE = {'index': 'http://www.rfc-editor.org/rfc-index'}
 
+DocId = Tuple[DocumentType, int]
+
 
 def findall(root: xml.etree.ElementTree.Element, doc_type: DocumentType) -> List[xml.etree.ElementTree.Element]:
     """Return a list of all entries of type `doc_type`."""
@@ -191,3 +193,25 @@ def find_notes(entry: xml.etree.ElementTree.Element) -> str:
         return notes.text
     else:
         return None
+
+
+def find_obsoletes(entry: xml.etree.ElementTree.Element) -> List[DocId]:
+    """Return a list of binary tuples that represent the documents that `entry`
+    obsoletes.
+
+    The first element of the tuple is a DocumentType.
+    The second element is an integer.
+    """
+
+    found_entry = entry.find('index:obsoletes', NAMESPACE)
+
+    doc_ids = []
+    if found_entry is not None:
+        obsoletes = found_entry.findall('index:doc-id', NAMESPACE)
+        for obsolete in obsoletes:
+            text = obsolete.text  # Get the content of a doc-id element
+            doc_type = DocumentType[text[0:3]]
+            doc_id = int(text[3:])
+            doc_ids.append((doc_type, doc_id))
+
+    return doc_ids

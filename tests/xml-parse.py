@@ -181,6 +181,62 @@ class TestParse(unittest.TestCase):
             parse.find_notes(self.entries[2])
         )
 
+    def test_find_obsoletes(self):
+        doc_ids = parse.find_obsoletes(self.entries[0])  # RFC 8180
+        self.assertEqual(
+            [],
+            doc_ids
+        )
+
+        doc_ids = parse.find_obsoletes(self.entries[1])  # RFC 0010
+        # RFC0010 obsoletes 3 entries
+        self.assertEqual(
+            3,
+            len(doc_ids)
+        )
+        # The first is RFC0024
+        self.assertEqual(
+            parse.DocumentType.RFC,
+            doc_ids[0][0]
+        )
+        self.assertEqual(
+            24,
+            doc_ids[0][1]
+        )
+        # The second is RFC0027
+        self.assertEqual(
+            parse.DocumentType.RFC,
+            doc_ids[1][0]
+        )
+        self.assertEqual(
+            27,
+            doc_ids[1][1]
+        )
+        # The second is RFC0030
+        self.assertEqual(
+            parse.DocumentType.RFC,
+            doc_ids[2][0]
+        )
+        self.assertEqual(
+            30,
+            doc_ids[2][1]
+        )
+
+        doc_ids = parse.find_obsoletes(self.entries[2])  # RFC 8174
+        # 1 entry
+        self.assertEqual(
+            1,
+            len(doc_ids)
+        )
+        self.assertEqual(
+            parse.DocumentType.RFC,
+            doc_ids[0][0]
+        )
+        self.assertEqual(
+            2119,
+            doc_ids[0][1]
+        )
+
 
 if __name__ == '__main__':
     unittest.main()
