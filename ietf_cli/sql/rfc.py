@@ -2,6 +2,7 @@
 from ietf_cli.sql.author import Author
 from ietf_cli.sql.base import Base
 from ietf_cli.sql.file_format import FileFormat
+from ietf_cli.sql.is_also import IsAlso
 from ietf_cli.sql.obsoleted_by import ObsoletedBy
 from ietf_cli.sql.obsoletes import Obsoletes
 from ietf_cli.sql.updated_by import UpdatedBy
@@ -35,6 +36,7 @@ class Rfc(Base):
                            back_populates='rfc')
     updated_by = relationship('UpdatedBy', order_by=UpdatedBy.id,
                               back_populates='rfc')
+    is_also = relationship('IsAlso', order_by=IsAlso.id, back_populates='rfc')
     current_status = Column(Enum(Status), nullable=False)
     publication_status = Column(Enum(Status), nullable=False)
     stream = Column(Enum(Stream))
