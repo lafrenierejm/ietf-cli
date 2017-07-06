@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-from typing import List, Dict
+from typing import List, Dict, Tuple
 import xml.etree.ElementTree
-from .enum import DocumentType, Month
+from .enum import DocumentType, FileType, Month
 
 NAMESPACE = {'index': 'http://www.rfc-editor.org/rfc-index'}
 
@@ -112,3 +112,43 @@ def find_date(entry: xml.etree.ElementTree.Element) -> Dict[str, int]:
     date['day'] = day
 
     return date
+
+
+def find_format(entry: xml.etree.ElementTree.Element) -> List[Tuple[FileType,
+                                                                    int, int]]:
+    """Return a list of triplets containing `entry`'s format information.
+
+    Elements of tuples composing returned list:
+    FileType -- describes a filetype
+    int -- the character count
+    int/None -- the page count
+    """
+
+    format_entries = entry.findall('index:format', NAMESPACE)
+    formats = []
+
+    for format_entry in format_entries:
+        # Get the file format
+        file_format = FileType(format_entry.find('index:file-format',
+                                                 NAMESPACE).text)
+
+        # Get the character count
+        char_count = int(format_entry.find('index:char-count', NAMESPACE).text)
+
+        # Get the page count, which is not guaraneed to exist
+        ## Attempt to get the text from inside the XML page-count tag
+        try:
+            page_count_str = format_entry.find('index:page-count',
+                                               NAMESPACE).text
+        except AttributeError:
+            page_count = None
+        except:
+            raise
+        ## If there was no exception convert the retrieved str to an int
+        else:
+            page_count = int(page_count_str)
+
+        # Add the triplet to formats
+        formats.append((file_format, char_count, page_count))
+
+    return formats

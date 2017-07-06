@@ -7,7 +7,7 @@ import xml.etree.ElementTree as ET
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 try:
     import ietf_cli.xml.parse as parse
-    from ietf_cli.xml.enum import DocumentType
+    from ietf_cli.xml.enum import DocumentType, FileType
 except:
     raise
 
@@ -108,6 +108,24 @@ class TestParse(unittest.TestCase):
         self.assertEqual(
             2017,
             date['year']
+        )
+
+    def test_find_format(self):
+        forms = parse.find_format(self.entries[0])
+        self.assertEqual(1, len(forms))
+        file_format, char_count, page_count = forms[0]
+
+        self.assertEqual(
+            parse.FileType.ASCII,
+            file_format
+        )
+        self.assertEqual(
+            60068,
+            char_count
+        )
+        self.assertEqual(
+            28,
+            page_count
         )
 
 
