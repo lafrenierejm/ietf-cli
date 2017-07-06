@@ -516,6 +516,16 @@ class TestParse(unittest.TestCase):
         self.assertEqual('NON WORKING GROUP',
                          parse.find_wg_acronym(self.entries[2]))
 
+    def test_find_errata_url(self):
+        self.assertEqual('http://www.rfc-editor.org/errata_search.php?rfc=31',
+                         parse.find_errata_url(self.entries[0]))
+
+        self.assertIsNone(parse.find_errata_url(self.entries[1]))
+
+        self.assertEqual(
+            'http://www.rfc-editor.org/errata_search.php?rfc=8174',
+            parse.find_errata_url(self.entries[2]))
+
 
 if __name__ == '__main__':
     unittest.main()

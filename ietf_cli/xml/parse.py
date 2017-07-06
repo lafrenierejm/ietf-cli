@@ -366,3 +366,13 @@ def find_wg_acronym(entry: xml.etree.ElementTree.Element) -> str:
         return acronym_entry.text
     else:
         return None
+
+
+def find_errata_url(entry: xml.etree.ElementTree.Element) -> str:
+    """Return the `errata_url` element of `entry`."""
+    errata_entry = entry.find('index:errata-url', NAMESPACE)
+
+    if errata_entry is not None:
+        return errata_entry.text
+    else:
+        return None
