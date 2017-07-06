@@ -526,6 +526,16 @@ class TestParse(unittest.TestCase):
             'http://www.rfc-editor.org/errata_search.php?rfc=8174',
             parse.find_errata_url(self.entries[2]))
 
+    def test_find_doi(self):
+        self.assertEqual('10.17487/RFC8180',
+                         parse.find_doi(self.entries[0]))
+
+        self.assertEqual('10.17487/RFC0010',
+                         parse.find_doi(self.entries[1]))
+
+        self.assertEqual('10.17487/RFC8174',
+                         parse.find_doi(self.entries[2]))
+
 
 if __name__ == '__main__':
     unittest.main()

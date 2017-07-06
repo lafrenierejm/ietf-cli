@@ -376,3 +376,13 @@ def find_errata_url(entry: xml.etree.ElementTree.Element) -> str:
         return errata_entry.text
     else:
         return None
+
+
+def find_doi(entry: xml.etree.ElementTree.Element) -> str:
+    """Return the `doi` element of `entry`."""
+    doi_entry = entry.find('index:doi', NAMESPACE)
+
+    if doi_entry is not None:
+        return doi_entry.text
+    else:
+        return None
