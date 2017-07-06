@@ -356,3 +356,13 @@ def find_area(entry: xml.etree.ElementTree.Element) -> str:
         return area_entry.text
     else:
         return None
+
+
+def find_wg_acronym(entry: xml.etree.ElementTree.Element) -> str:
+    """Return the `wg_acronym` element of `entry`."""
+    acronym_entry = entry.find('index:wg_acronym', NAMESPACE)
+
+    if acronym_entry is not None:
+        return acronym_entry.text
+    else:
+        return None

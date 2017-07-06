@@ -508,6 +508,14 @@ class TestParse(unittest.TestCase):
 
         self.assertIsNone(parse.find_area(self.entries[2]))
 
+    def test_find_wg_acronym(self):
+        self.assertEqual('6tisch', parse.find_wg_acronym(self.entries[0]))
+
+        self.assertIsNone(parse.find_wg_acronym(self.entries[1]))
+
+        self.assertEqual('NON WORKING GROUP',
+                         parse.find_wg_acronym(self.entries[2]))
+
 
 if __name__ == '__main__':
     unittest.main()
