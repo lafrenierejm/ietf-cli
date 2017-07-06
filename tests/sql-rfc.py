@@ -14,6 +14,7 @@ try:
     from ietf_cli.sql.obsoleted_by import ObsoletedBy
     from ietf_cli.sql.obsoletes import Obsoletes
     from ietf_cli.sql.rfc import Rfc
+    from ietf_cli.sql.updated_by import UpdatedBy
     from ietf_cli.sql.updates import Updates
     from ietf_cli.xml.enum import DocumentType, FileType, Status, Stream
 except:
@@ -227,6 +228,42 @@ class TestRfc(unittest.TestCase):
                          self.rfc0002_query.updates[1].doc_id)
         self.assertEqual(DocumentType.STD,
                          self.rfc0002_query.updates[1].doc_type)
+
+    def test_updated_by(self):
+        self.assertEqual(0, len(self.rfc0001.updated_by))  # none added
+        self.assertEqual(0, len(self.rfc0002.updated_by))  # none added
+
+        # Add updated_by information to the RFCs
+        self.rfc0001.updated_by = [UpdatedBy(doc_id=1,
+                                             doc_type=DocumentType.RFC)]
+        self.rfc0002.updated_by = [UpdatedBy(doc_id=1,
+                                             doc_type=DocumentType.RFC),
+                                   UpdatedBy(doc_id=2,
+                                             doc_type=DocumentType.STD)]
+        self.session.add(self.rfc0001)  # add the changes made to rfc0001
+        self.session.add(self.rfc0002)  # add the changes made to rfc0002
+        self.session.commit()  # commit the added changes
+
+        # Get the RFC entries from the DB
+        self.rfc0001_query = self.session.query(Rfc).\
+            filter_by(id=1).one()
+        self.rfc0002_query = self.session.query(Rfc).\
+            filter_by(id=2).one()
+
+        # Assertions about rfc0001
+        self.assertEqual(1, len(self.rfc0001_query.updated_by))
+        self.assertEqual(1, self.rfc0001_query.updated_by[0].id)
+        self.assertEqual(DocumentType.RFC,
+                         self.rfc0001_query.updated_by[0].doc_type)
+
+        # Assertions about rfc0002
+        self.assertEqual(2, len(self.rfc0002_query.updated_by))
+        self.assertEqual(1, self.rfc0002_query.updated_by[0].doc_id)
+        self.assertEqual(DocumentType.RFC,
+                         self.rfc0002_query.updated_by[0].doc_type)
+        self.assertEqual(2, self.rfc0002_query.updated_by[1].doc_id)
+        self.assertEqual(DocumentType.STD,
+                         self.rfc0002_query.updated_by[1].doc_type)
 
 
 if __name__ == '__main__':
