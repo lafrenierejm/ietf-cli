@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from ietf_cli.sql.author import Author
 from ietf_cli.sql.base import Base
+from ietf_cli.sql.file_format import FileFormat
 from ietf_cli.xml.enum import Status, Stream
 from sqlalchemy import Column, Enum, Integer, String
 from sqlalchemy.orm import relationship
@@ -16,6 +17,8 @@ class Rfc(Base):
     date_day = Column(Integer)
     date_month = Column(Integer, nullable=False)
     date_year = Column(Integer, nullable=False)
+    formats = relationship('FileFormat', order_by=FileFormat.id,
+                           back_populates='rfc')
     keywords = Column(String)
     abstract = Column(String)
     draft = Column(String)

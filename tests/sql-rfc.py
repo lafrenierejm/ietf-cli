@@ -10,8 +10,9 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 try:
     from ietf_cli.sql.author import Author
     from ietf_cli.sql.base import Base
+    from ietf_cli.sql.file_format import FileFormat
     from ietf_cli.sql.rfc import Rfc
-    from ietf_cli.xml.enum import Status, Stream
+    from ietf_cli.xml.enum import FileType, Status, Stream
 except:
     raise
 
@@ -70,6 +71,48 @@ class TestRfc(unittest.TestCase):
         self.assertEqual('Author 1 for RFC 2',
                          self.rfc0002_query.authors[0].name)
         self.assertIsNone(self.rfc0002_query.authors[0].title)
+
+    def test_formats(self):
+        self.assertEqual(0, len(self.rfc0001.formats))  # before adding formats
+        self.assertEqual(0, len(self.rfc0002.formats))  # before adding formats
+
+        # Add formats information to the RFCs
+        self.rfc0001.formats = [FileFormat(filetype=FileType.ASCII,
+                                           char_count=1)]
+        self.rfc0002.formats = [FileFormat(filetype=FileType.ASCII,
+                                           char_count=1),
+                                FileFormat(filetype=FileType.ASCII,
+                                           char_count=1, page_count=1)]
+        self.session.add(self.rfc0001)  # add the changes made to rfc0001
+        self.session.add(self.rfc0002)  # add the changes made to rfc0002
+        self.session.commit()  # commit the added changes
+
+        # Get the RFC entries from the DB
+        self.rfc0001_query = self.session.query(Rfc).\
+            filter_by(id=1).one()
+        self.rfc0002_query = self.session.query(Rfc).\
+            filter_by(id=2).one()
+
+        # Assertions about rfc0001
+        self.assertEqual(1, len(self.rfc0001_query.formats))
+        self.assertEqual(FileType.ASCII,
+                         self.rfc0001_query.formats[0].filetype)
+        self.assertEqual(1, self.rfc0001_query.formats[0].char_count)
+        self.assertIsNone(self.rfc0001_query.formats[0].page_count)
+
+        # Assertions about rfc0002
+        # number of format entries
+        self.assertEqual(2, len(self.rfc0002_query.formats))
+        # first format entry
+        self.assertEqual(FileType.ASCII,
+                         self.rfc0002_query.formats[0].filetype)
+        self.assertEqual(1, self.rfc0002_query.formats[0].char_count)
+        self.assertIsNone(self.rfc0002_query.formats[0].page_count)
+        # second format entry
+        self.assertEqual(FileType.ASCII,
+                         self.rfc0002_query.formats[1].filetype)
+        self.assertEqual(1, self.rfc0002_query.formats[1].char_count)
+        self.assertEqual(1, self.rfc0002_query.formats[1].page_count)
 
 
 if __name__ == '__main__':
