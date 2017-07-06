@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
+from ietf_cli.sql.author import Author
 from ietf_cli.sql.base import Base
 from ietf_cli.xml.enum import Status, Stream
 from sqlalchemy import Column, Enum, Integer, String
+from sqlalchemy.orm import relationship
 
 
 class Rfc(Base):
@@ -9,6 +11,8 @@ class Rfc(Base):
 
     id = Column(Integer, primary_key=True)
     title = Column(String, nullable=False)
+    authors = relationship('Author', order_by=Author.id,
+                           back_populates='rfc')
     date_day = Column(Integer)
     date_month = Column(Integer, nullable=False)
     date_year = Column(Integer, nullable=False)

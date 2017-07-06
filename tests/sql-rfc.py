@@ -8,6 +8,7 @@ from sqlalchemy.orm import sessionmaker
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 try:
+    from ietf_cli.sql.author import Author
     from ietf_cli.sql.base import Base
     from ietf_cli.sql.rfc import Rfc
     from ietf_cli.xml.enum import Status, Stream
@@ -42,6 +43,33 @@ class TestRfc(unittest.TestCase):
                            errata_url='errata_url for RFC 2',
                            doi='doi for RFC 2')
         self.session.add(self.rfc0002)
+
+    def test_authors(self):
+        self.assertEqual(0, len(self.rfc0001.authors))  # before adding authors
+        self.assertEqual(0, len(self.rfc0002.authors))  # before adding authors
+
+        # Add formats information to the RFCs
+        self.rfc0001.authors = [Author(name='Author 1 for RFC 1')]
+        self.rfc0002.authors = [Author(name='Author 1 for RFC 2'),
+                                Author(name='Author 2 for RFC 2')]
+        self.session.add(self.rfc0001)  # add the changes made to rfc0001
+        self.session.add(self.rfc0002)  # add the changes made to rfc0002
+        self.session.commit()  # commit the added changes
+
+        # Check the DB's copy of rfc0001
+        self.rfc0001_query = self.session.query(Rfc).\
+            filter_by(id=1).one()
+        self.assertEqual(1, len(self.rfc0001_query.authors))
+        self.assertEqual('Author 1 for RFC 1',
+                         self.rfc0001_query.authors[0].name)
+
+        # Check the DB's copy of rfc0002
+        self.rfc0002_query = self.session.query(Rfc).\
+            filter_by(id=2).one()
+        self.assertEqual(2, len(self.rfc0002_query.authors))
+        self.assertEqual('Author 1 for RFC 2',
+                         self.rfc0002_query.authors[0].name)
+        self.assertIsNone(self.rfc0002_query.authors[0].title)
 
 
 if __name__ == '__main__':
