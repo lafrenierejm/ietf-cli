@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 from typing import List, Dict, Tuple
 import xml.etree.ElementTree
-from .enum import DocumentType, FileType, Month, Status
+from .enum import DocumentType, FileType, Month, Status, Stream
 
 NAMESPACE = {'index': 'http://www.rfc-editor.org/rfc-index'}
 
@@ -336,3 +336,13 @@ def find_current_status(entry: xml.etree.ElementTree.Element) -> Status:
 def find_publication_status(entry: xml.etree.ElementTree.Element) -> Status:
     """Return the status of `entry` at the time of its publication."""
     return Status(entry.find('index:publication-status', NAMESPACE).text)
+
+
+def find_stream(entry: xml.etree.ElementTree.Element) -> Status:
+    """Return the `stream` element of `entry`."""
+    stream_entry = entry.find('index:stream', NAMESPACE)
+
+    if stream_entry is not None:
+        return Stream(stream_entry.text)
+    else:
+        return None

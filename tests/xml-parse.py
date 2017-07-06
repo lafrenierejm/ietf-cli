@@ -7,7 +7,7 @@ import xml.etree.ElementTree as ET
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 try:
     import ietf_cli.xml.parse as parse
-    from ietf_cli.xml.enum import DocumentType, FileType, Status
+    from ietf_cli.xml.enum import DocumentType, FileType, Status, Stream
 except:
     raise
 
@@ -491,6 +491,15 @@ class TestParse(unittest.TestCase):
 
         self.assertEqual(Status.BEST_CURRENT_PRACTICE,
                          parse.find_publication_status(self.entries[2]))
+
+    def test_find_stream(self):
+        self.assertEqual(Stream.IETF,
+                         parse.find_stream(self.entries[0]))
+
+        self.assertIsNone(parse.find_stream(self.entries[1]))
+
+        self.assertEqual(Stream.IETF,
+                         parse.find_stream(self.entries[2]))
 
 
 if __name__ == '__main__':
