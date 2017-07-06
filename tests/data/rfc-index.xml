@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rfc-index xmlns="http://www.rfc-editor.org/rfc-index" 
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+           xsi:schemaLocation="http://www.rfc-editor.org/rfc-index 
+                               http://www.rfc-editor.org/rfc-index.xsd">
+    <rfc-entry>
+        <doc-id>RFC8180</doc-id>
+        <title>Minimal IPv6 over the TSCH Mode of IEEE 802.15.4e (6TiSCH) Configuration</title>
+        <author>
+            <name>X. Vilajosana</name>
+            <title>Editor</title>
+        </author>
+        <author>
+            <name>K. Pister</name>
+        </author>
+        <author>
+            <name>T. Watteyne</name>
+        </author>
+        <date>
+            <month>May</month>
+            <year>2017</year>
+        </date>
+        <format>
+            <file-format>ASCII</file-format>
+            <char-count>60068</char-count>
+            <page-count>28</page-count>
+        </format>
+        <abstract><p>This document describes a minimal mode of operation for an IPv6 over the TSCH mode of IEEE 802.15.4e (6TiSCH) network.</p></abstract>
+        <draft>draft-ietf-6tisch-minimal-21</draft>
+        <is-also>
+            <doc-id>BCP0210</doc-id>
+        </is-also>
+        <see-also>
+            <doc-id>BCP0000</doc-id>
+        </see-also>
+        <current-status>BEST CURRENT PRACTICE</current-status>
+        <publication-status>BEST CURRENT PRACTICE</publication-status>
+        <stream>IETF</stream>
+        <area>int</area>
+        <wg_acronym>6tisch</wg_acronym>
+        <errata-url>http://www.rfc-editor.org/errata_search.php?rfc=31</errata-url>
+        <doi>10.17487/RFC8180</doi>
+    </rfc-entry>
+    <rfc-entry>
+        <doc-id>RFC0010</doc-id>
+        <title>Documentation conventions</title>
+        <author>
+            <name>S.D. Crocker</name>
+        </author>
+        <date>
+            <month>July</month>
+            <year>1969</year>
+        </date>
+        <format>
+            <file-format>ASCII</file-format>
+            <char-count>3348</char-count>
+            <page-count>3</page-count>
+        </format>
+        <obsoletes>
+            <doc-id>RFC0024</doc-id>
+            <doc-id>RFC0027</doc-id>
+            <doc-id>RFC0030</doc-id>
+        </obsoletes>
+        <obsoleted-by>
+            <doc-id>RFC0024</doc-id>
+            <doc-id>RFC0027</doc-id>
+            <doc-id>RFC0030</doc-id>
+        </obsoleted-by>
+        <updates>
+            <doc-id>RFC0024</doc-id>
+            <doc-id>RFC0027</doc-id>
+            <doc-id>RFC0030</doc-id>
+        </updates>
+        <updated-by>
+            <doc-id>RFC0024</doc-id>
+            <doc-id>RFC0027</doc-id>
+            <doc-id>RFC0030</doc-id>
+        </updated-by>
+        <current-status>UNKNOWN</current-status>
+        <publication-status>UNKNOWN</publication-status>
+        <doi>10.17487/RFC0010</doi>
+    </rfc-entry>
+    <rfc-entry>
+        <doc-id>RFC8174</doc-id>
+        <title>Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words</title>
+        <author>
+            <name>B. Leiba</name>
+        </author>
+        <date>
+            <month>May</month>
+            <year>2017</year>
+        </date>
+        <format>
+            <file-format>ASCII</file-format>
+            <char-count>6071</char-count>
+            <page-count>4</page-count>
+        </format>
+        <abstract><p>RFC 2119 specifies common key words that may be used in protocol specifications.  This document aims to reduce the ambiguity by clarifying that only UPPERCASE usage of the key words have the defined special meanings.</p></abstract>
+        <draft>draft-leiba-rfc2119-update-02</draft>
+        <obsoletes>
+            <doc-id>RFC2119</doc-id>
+        </obsoletes>
+        <obsoleted-by>
+            <doc-id>RFC2119</doc-id>
+        </obsoleted-by>
+        <updates>
+            <doc-id>RFC2119</doc-id>
+        </updates>
+        <updated-by>
+            <doc-id>RFC2119</doc-id>
+        </updated-by>
+        <is-also>
+            <doc-id>BCP0014</doc-id>
+        </is-also>
+        <current-status>BEST CURRENT PRACTICE</current-status>
+        <publication-status>BEST CURRENT PRACTICE</publication-status>
+        <stream>IETF</stream>
+        <wg_acronym>NON WORKING GROUP</wg_acronym>
+        <errata-url>http://www.rfc-editor.org/errata_search.php?rfc=8174</errata-url>
+        <doi>10.17487/RFC8174</doi>
+    </rfc-entry>
+</rfc-index>

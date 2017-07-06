@@ -1,0 +1,29 @@
+#!/usr/bin/env python3
+import os
+import sys
+import unittest
+import xml.etree.ElementTree as ET
+
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+try:
+    import ietf_cli.xml.parse as parse
+    from ietf_cli.xml.enum import DocumentType
+except:
+    raise
+
+
+class TestParse(unittest.TestCase):
+    data_file = os.path.join(os.path.dirname(__file__), 'data/rfc-index.xml')
+    namespace = {'index': 'http://www.rfc-editor.org/rfc-index'}
+
+    def setUp(self):
+        self.tree = ET.parse(type(self).data_file)
+        self.root = self.tree.getroot()
+        self.entries = parse.findall(self.root, DocumentType.RFC)
+
+    def test_findall(self):
+        self.assertEqual(3, len(self.entries))
+
+
+if __name__ == '__main__':
+    unittest.main()
