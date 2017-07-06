@@ -171,3 +171,13 @@ def find_abstract(entry: xml.etree.ElementTree.Element) -> List[str]:
         raise
 
     return abstract
+
+
+def find_draft(entry: xml.etree.ElementTree.Element) -> str:
+    """Return the `draft` element of `entry`."""
+    draft = entry.find('index:draft', NAMESPACE)
+
+    if draft is not None:
+        return draft.text
+    else:
+        return None

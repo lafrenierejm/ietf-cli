@@ -153,6 +153,21 @@ class TestParse(unittest.TestCase):
             abstract[0]
         )
 
+    def test_find_draft(self):
+        self.assertEqual(  # RFC 8180
+            'draft-ietf-6tisch-minimal-21',
+            parse.find_draft(self.entries[0])
+        )
+
+        self.assertIsNone(  # RFC 0010
+            parse.find_draft(self.entries[1])
+        )
+
+        self.assertEqual(  # RFC 8174
+            'draft-leiba-rfc2119-update-02',
+            parse.find_draft(self.entries[2])
+        )
+
 
 if __name__ == '__main__':
     unittest.main()
