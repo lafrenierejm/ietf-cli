@@ -331,3 +331,8 @@ def find_see_also(entry: xml.etree.ElementTree.Element) -> List[DocId]:
 def find_current_status(entry: xml.etree.ElementTree.Element) -> Status:
     """Return `entry`'s current status."""
     return Status(entry.find('index:current-status', NAMESPACE).text)
+
+
+def find_publication_status(entry: xml.etree.ElementTree.Element) -> Status:
+    """Return the status of `entry` at the time of its publication."""
+    return Status(entry.find('index:publication-status', NAMESPACE).text)

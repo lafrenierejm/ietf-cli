@@ -482,6 +482,16 @@ class TestParse(unittest.TestCase):
         self.assertEqual(Status.BEST_CURRENT_PRACTICE,
                          parse.find_current_status(self.entries[2]))
 
+    def test_find_publication_status(self):
+        self.assertEqual(Status.BEST_CURRENT_PRACTICE,
+                         parse.find_publication_status(self.entries[0]))
+
+        self.assertEqual(Status.UNKNOWN,
+                         parse.find_publication_status(self.entries[1]))
+
+        self.assertEqual(Status.BEST_CURRENT_PRACTICE,
+                         parse.find_publication_status(self.entries[2]))
+
 
 if __name__ == '__main__':
     unittest.main()
