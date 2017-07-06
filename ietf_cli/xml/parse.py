@@ -17,3 +17,8 @@ def find_doc_id(entry: xml.etree.ElementTree.Element) -> int:
     doc_id = entry.find('index:doc-id', NAMESPACE).text
     # Strip the three DocumentType letters off the ID
     return int(doc_id[3:])
+
+
+def find_title(entry: xml.etree.ElementTree.Element) -> str:
+    """Return the `title` element of `entry`."""
+    return entry.find('index:title', NAMESPACE).text

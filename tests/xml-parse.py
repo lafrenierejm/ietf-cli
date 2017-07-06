@@ -29,6 +29,21 @@ class TestParse(unittest.TestCase):
         self.assertEqual(10, parse.find_doc_id(self.entries[1]))
         self.assertEqual(8174, parse.find_doc_id(self.entries[2]))
 
+    def test_find_title(self):
+        self.assertEqual(  # 8180
+            'Minimal IPv6 over the TSCH Mode of IEEE 802.15.4e (6TiSCH) '
+            'Configuration',
+            parse.find_title(self.entries[0])
+        )
+        self.assertEqual(  # 10
+            'Documentation conventions',
+            parse.find_title(self.entries[1])
+        )
+        self.assertEqual(  # 8174
+            'Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words',
+            parse.find_title(self.entries[2])
+        )
+
 
 if __name__ == '__main__':
     unittest.main()
