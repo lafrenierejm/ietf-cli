@@ -152,3 +152,22 @@ def find_format(entry: xml.etree.ElementTree.Element) -> List[Tuple[FileType,
         formats.append((file_format, char_count, page_count))
 
     return formats
+
+
+def find_abstract(entry: xml.etree.ElementTree.Element) -> List[str]:
+    """Return a list of strings containing the paragraphs composing `entry`'s
+    `abstract` element.
+    """
+
+    abstract = []
+    try:
+        abstract_pars = entry.find('index:abstract', NAMESPACE).\
+            findall('index:p', NAMESPACE)
+        for abstract_par in abstract_pars:
+            abstract.append(abstract_par.text)
+    except AttributeError:
+        pass
+    except:
+        raise
+
+    return abstract

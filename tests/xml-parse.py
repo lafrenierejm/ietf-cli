@@ -128,6 +128,31 @@ class TestParse(unittest.TestCase):
             page_count
         )
 
+    def test_find_abstract(self):
+        abstract = parse.find_abstract(self.entries[0])  # RFC 8180
+        self.assertEqual(1, len(abstract))
+        self.assertEqual(  # RFC 8180
+            'This document describes a minimal mode of operation for '
+            'an IPv6 over the TSCH mode of IEEE 802.15.4e (6TiSCH) network.',
+            abstract[0]
+        )
+
+        abstract = parse.find_abstract(self.entries[1])  # RFC 0010
+        self.assertEqual(
+            [],
+            abstract
+        )
+
+        abstract = parse.find_abstract(self.entries[2])  # RFC 8174
+        self.assertEqual(1, len(abstract))
+        self.assertEqual(
+            'RFC 2119 specifies common key words that may be used in protocol '
+            'specifications.  This document aims to reduce the ambiguity by '
+            'clarifying that only UPPERCASE usage of the key words have the '
+            'defined special meanings.',
+            abstract[0]
+        )
+
 
 if __name__ == '__main__':
     unittest.main()
