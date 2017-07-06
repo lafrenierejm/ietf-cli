@@ -501,6 +501,13 @@ class TestParse(unittest.TestCase):
         self.assertEqual(Stream.IETF,
                          parse.find_stream(self.entries[2]))
 
+    def test_find_area(self):
+        self.assertEqual('int', parse.find_area(self.entries[0]))
+
+        self.assertIsNone(parse.find_area(self.entries[1]))
+
+        self.assertIsNone(parse.find_area(self.entries[2]))
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -346,3 +346,13 @@ def find_stream(entry: xml.etree.ElementTree.Element) -> Status:
         return Stream(stream_entry.text)
     else:
         return None
+
+
+def find_area(entry: xml.etree.ElementTree.Element) -> str:
+    """Return the `area` element of `entry`."""
+    area_entry = entry.find('index:area', NAMESPACE)
+
+    if area_entry is not None:
+        return area_entry.text
+    else:
+        return None
