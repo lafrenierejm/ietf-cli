@@ -404,6 +404,44 @@ class TestParse(unittest.TestCase):
             doc_ids[0][1]
         )
 
+    def test_find_is_also(self):
+        doc_ids = parse.find_is_also(self.entries[0])  # RFC 8180
+        # There is 1 reference to BCP0000
+        self.assertEqual(
+            1,
+            len(doc_ids)
+        )
+        self.assertEqual(
+            parse.DocumentType.BCP,
+            doc_ids[0][0]
+        )
+        self.assertEqual(
+            210,
+            doc_ids[0][1]
+        )
+
+        doc_ids = parse.find_is_also(self.entries[1])  # RFC 0010
+        # There are no aliases
+        self.assertEqual(
+            [],
+            doc_ids
+        )
+
+        doc_ids = parse.find_is_also(self.entries[2])  # RFC 8174
+        # There is one alias
+        self.assertEqual(
+            1,
+            len(doc_ids)
+        )
+        self.assertEqual(
+            parse.DocumentType.BCP,
+            doc_ids[0][0]
+        )
+        self.assertEqual(
+            14,
+            doc_ids[0][1]
+        )
+
 
 if __name__ == '__main__':
     unittest.main()
