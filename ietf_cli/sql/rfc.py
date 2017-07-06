@@ -4,6 +4,7 @@ from ietf_cli.sql.base import Base
 from ietf_cli.sql.file_format import FileFormat
 from ietf_cli.sql.obsoleted_by import ObsoletedBy
 from ietf_cli.sql.obsoletes import Obsoletes
+from ietf_cli.sql.updates import Updates
 from ietf_cli.xml.enum import Status, Stream
 from sqlalchemy import Column, Enum, Integer, String
 from sqlalchemy.orm import relationship
@@ -29,6 +30,8 @@ class Rfc(Base):
                              back_populates='rfc')
     obsoleted_by = relationship('ObsoletedBy', order_by=ObsoletedBy.id,
                                 back_populates='rfc')
+    updates = relationship('Updates', order_by=Updates.id,
+                           back_populates='rfc')
     current_status = Column(Enum(Status), nullable=False)
     publication_status = Column(Enum(Status), nullable=False)
     stream = Column(Enum(Stream))
