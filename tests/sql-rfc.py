@@ -8,17 +8,9 @@ from sqlalchemy.orm import sessionmaker
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 try:
-    from ietf_cli.sql.abstract import Abstract
-    from ietf_cli.sql.author import Author
     from ietf_cli.sql.base import Base
-    from ietf_cli.sql.file_format import FileFormat
-    from ietf_cli.sql.is_also import IsAlso
-    from ietf_cli.sql.obsoleted_by import ObsoletedBy
-    from ietf_cli.sql.obsoletes import Obsoletes
-    from ietf_cli.sql.rfc import Rfc
-    from ietf_cli.sql.see_also import SeeAlso
-    from ietf_cli.sql.updated_by import UpdatedBy
-    from ietf_cli.sql.updates import Updates
+    from ietf_cli.sql.rfc import Abstract, Author, FileFormat, IsAlso,\
+        ObsoletedBy, Obsoletes, Rfc, SeeAlso, UpdatedBy, Updates
     from ietf_cli.xml.enum import DocumentType, FileType, Status, Stream
 except:
     raise

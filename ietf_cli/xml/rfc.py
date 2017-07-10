@@ -1,13 +1,5 @@
-from ..sql.abstract import Abstract
-from ..sql.author import Author
-from ..sql.file_format import FileFormat
-from ..sql.is_also import IsAlso
-from ..sql.obsoleted_by import ObsoletedBy
-from ..sql.obsoletes import Obsoletes
-from ..sql.rfc import Rfc
-from ..sql.see_also import SeeAlso
-from ..sql.updated_by import UpdatedBy
-from ..sql.updates import Updates
+from ..sql.rfc import Abstract, Author, FileFormat, IsAlso, ObsoletedBy,\
+    Obsoletes, Rfc, SeeAlso, UpdatedBy, Updates
 from .enum import DocumentType
 from .parse import findall,\
     find_abstract,\
