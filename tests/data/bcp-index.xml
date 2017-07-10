@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rfc-index xmlns="http://www.rfc-editor.org/rfc-index"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.rfc-editor.org/rfc-index
+                               http://www.rfc-editor.org/rfc-index.xsd">
+    <bcp-entry>
+        <doc-id>BCP0002</doc-id>
+    </bcp-entry>
+    <bcp-entry>
+        <doc-id>BCP0003</doc-id>
+        <is-also>
+            <doc-id>RFC1915</doc-id>
+        </is-also>
+    </bcp-entry>
+</rfc-index>
