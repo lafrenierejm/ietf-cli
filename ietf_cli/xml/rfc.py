@@ -1,5 +1,5 @@
-from ..sql.rfc import Abstract, Author, FileFormat, IsAlso, ObsoletedBy,\
-    Obsoletes, Rfc, SeeAlso, UpdatedBy, Updates
+from ..sql.rfc import Abstract, Author, FileFormat, IsAlso, Keyword,\
+    ObsoletedBy, Obsoletes, Rfc, SeeAlso, UpdatedBy, Updates
 from .enum import DocumentType
 from .parse import findall,\
     find_abstract,\
@@ -13,6 +13,7 @@ from .parse import findall,\
     find_errata_url,\
     find_format,\
     find_is_also,\
+    find_keywords,\
     find_notes,\
     find_obsoleted_by,\
     find_obsoletes,\
@@ -38,6 +39,7 @@ def add_all(session: sqlalchemy.orm.session.Session,
         authors = find_author(entry)
         year, month, day = find_date(entry)
         formats = find_format(entry)
+        keywords = find_keywords(entry)
         abstract_pars = find_abstract(entry)
         draft = find_draft(entry)
         notes = find_notes(entry)
@@ -82,6 +84,9 @@ def add_all(session: sqlalchemy.orm.session.Session,
             rfc.formats.append(FileFormat(filetype=filetype,
                                           char_count=char_count,
                                           page_count=page_count))
+        for keyword in keywords:
+            # Add keywords to rfc
+            rfc.keywords.append(Keyword(word=keyword))
         for par in abstract_pars:
             # Add abstract to rfc
             rfc.abstract.append(Abstract(par=par))

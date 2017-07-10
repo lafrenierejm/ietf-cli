@@ -154,6 +154,21 @@ def find_format(entry: xml.etree.ElementTree.Element) -> List[Tuple[FileType,
     return formats
 
 
+def find_keywords(entry: xml.etree.ElementTree.Element) -> List[str]:
+    """Return the list of keywords describing `entry`."""
+    keywords = []
+    try:
+        keyword_elems = entry.find('index:keywords', NAMESPACE).\
+                              findall('index:kw', NAMESPACE)
+        for keyword in keyword_elems:
+            keywords.append(keyword.text)
+    except AttributeError:
+        pass
+    except:
+        raise
+    return keywords
+
+
 def find_abstract(entry: xml.etree.ElementTree.Element) -> List[str]:
     """Return a list of strings containing the paragraphs composing `entry`'s
     `abstract` element.

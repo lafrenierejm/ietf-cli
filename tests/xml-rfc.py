@@ -12,7 +12,7 @@ try:
     import ietf_cli.xml.rfc as rfc
 
     from ietf_cli.sql.base import Base
-    from ietf_cli.sql.rfc import Rfc
+    from ietf_cli.sql.rfc import Keyword, Rfc
     from ietf_cli.xml.enum import DocumentType, FileType
 except:
     raise
@@ -187,6 +187,44 @@ class TestXmlRfc(unittest.TestCase):
         # RFC 8174
         self.rfc8174 = self.session.query(Rfc).filter(Rfc.id == 8174).one()
         self.assertEqual(0, len(self.rfc8174.see_also))
+
+    def test_keywords(self):
+        # RFC 8180
+        self.rfc8180 = self.session.query(Rfc).filter(Rfc.id == 8180).one()
+        self.assertEqual(0, len(self.rfc8180.keywords))
+        # RFC 0010
+        self.rfc0010 = self.session.query(Rfc).filter(Rfc.id == 10).one()
+        self.assertEqual(2, len(self.rfc0010.keywords))
+        self.assertEqual('One', self.rfc0010.keywords[0].word)
+        self.assertEqual('Two', self.rfc0010.keywords[1].word)
+        # RFC 8174
+        self.rfc8174 = self.session.query(Rfc).filter(Rfc.id == 8174).one()
+        self.assertEqual(1, len(self.rfc8174.keywords))
+        self.assertEqual('One', self.rfc0010.keywords[0].word)
+        # Keyword 'One'
+        self.one = self.session.query(Rfc).\
+            join(Keyword, Rfc.keywords).\
+            filter(Keyword.word == 'One').\
+            order_by(Rfc.id).\
+            all()
+        self.assertEqual(2, len(self.one))
+        self.assertEqual(self.rfc0010, self.one[0])
+        self.assertEqual(self.rfc8174, self.one[1])
+        # Keyword 'Two'
+        self.two = self.session.query(Rfc).\
+            join(Keyword, Rfc.keywords).\
+            filter(Keyword.word == 'Two').\
+            order_by(Rfc.id).\
+            all()
+        self.assertEqual(1, len(self.two))
+        self.assertEqual(self.rfc0010, self.two[0])
+        # Keyword 'DNE'
+        self.three = self.session.query(Rfc).\
+            join(Keyword, Rfc.keywords).\
+            filter(Keyword.word == 'DNE').\
+            order_by(Rfc.id).\
+            all()
+        self.assertEqual(0, len(self.three))
 
 
 if __name__ == '__main__':

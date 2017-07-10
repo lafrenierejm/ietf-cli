@@ -56,6 +56,10 @@
             <char-count>3348</char-count>
             <page-count>3</page-count>
         </format>
+        <keywords>
+            <kw>One</kw>
+            <kw>Two</kw>
+        </keywords>
         <obsoletes>
             <doc-id>RFC0024</doc-id>
             <doc-id>RFC0027</doc-id>
@@ -96,6 +100,9 @@
             <char-count>6071</char-count>
             <page-count>4</page-count>
         </format>
+        <keywords>
+            <kw>One</kw>
+        </keywords>
         <abstract><p>RFC 2119 specifies common key words that may be used in protocol specifications.  This document aims to reduce the ambiguity by clarifying that only UPPERCASE usage of the key words have the defined special meanings.</p></abstract>
         <draft>draft-leiba-rfc2119-update-02</draft>
         <obsoletes>
