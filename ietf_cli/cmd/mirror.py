@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import os
-
+import argparse
 import typing
 from typing import List, Tuple
 
@@ -88,3 +88,34 @@ def mirror(args):
 
     # Wait for each rsync process to complete
     exitcodes = [p.wait() for p in processes]
+
+
+def add_subparser(subparsers: argparse._SubParsersAction):
+    """Create the parser for the `mirror` subcommand."""
+    parser = subparsers.add_parser(
+        'mirror',
+        help='update a local mirror')
+    parser.add_argument(
+        '-d', '--dir',
+        type=str,
+        nargs=1,  # exactly 1 argument
+        default=BaseDirectory.save_data_path('ietf-cli'),
+        help='top-level destination of local mirror')
+    parser.add_argument(
+        '--flat',
+        action='store_true',
+        help='do not create a subdirectory for invidivual document types')
+    parser.add_argument(
+        '-t', '--type',
+        type=str,
+        nargs='+',  # 1 or more arguments
+        choices=['draft',
+                 'iana',
+                 'iesg',
+                 'charter',
+                 'conflict',
+                 'status',
+                 'rfc'],
+        default=None,
+        help='type of documents to download')
+    parser.set_defaults(func=mirror)
