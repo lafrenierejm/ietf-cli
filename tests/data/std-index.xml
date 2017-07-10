@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rfc-index xmlns="http://www.rfc-editor.org/rfc-index"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.rfc-editor.org/rfc-index
+                               http://www.rfc-editor.org/rfc-index.xsd">
+    <std-entry>
+        <doc-id>STD0001</doc-id>
+        <title>[STD number 1 is retired. It was "Internet Official Protocol Standards".  See BCP 9 / RFC 7100 for more information.]</title>
+    </std-entry>
+    <std-entry>
+        <doc-id>STD0003</doc-id>
+        <title>Requirements for Internet Hosts</title>
+        <is-also>
+            <doc-id>RFC1122</doc-id>
+            <doc-id>RFC1123</doc-id>
+        </is-also>
+    </std-entry>
+</rfc-index>

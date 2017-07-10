@@ -24,7 +24,7 @@ except:
     raise
 
 
-class TestRfc(unittest.TestCase):
+class TestSqlRfc(unittest.TestCase):
 
     def setUp(self):
         self.engine = create_engine('sqlite:///:memory:')
