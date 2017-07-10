@@ -19,7 +19,7 @@ class TestParse(unittest.TestCase):
     def setUp(self):
         self.tree = ET.parse(type(self).data_file)
         self.root = self.tree.getroot()
-        self.entries = parse.findall(self.root, DocumentType.RFC)
+        self.entries = parse.findall(self.root, 'rfc-entry')
 
     def test_findall(self):
         self.assertEqual(3, len(self.entries))

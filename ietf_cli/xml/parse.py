@@ -7,10 +7,9 @@ NAMESPACE = {'index': 'http://www.rfc-editor.org/rfc-index'}
 
 DocId = Tuple[DocumentType, int]
 
-def findall(root: xml.etree.ElementTree.Element, doc_type: DocumentType) -> List[xml.etree.ElementTree.Element]:
-    """Return a list of all entries of type `doc_type`."""
-    return root.findall('index:{}-entry'.format(doc_type.value.lower()),
-                        NAMESPACE)
+def findall(root: xml.etree.ElementTree.Element, entry_type: str) -> List[xml.etree.ElementTree.Element]:
+    """Return a list of all entries of type `entry_type`."""
+    return root.findall('index:{}'.format(entry_type), NAMESPACE)
 
 
 def find_doc_id(entry: xml.etree.ElementTree.Element) -> int:

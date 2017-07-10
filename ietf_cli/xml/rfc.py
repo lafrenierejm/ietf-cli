@@ -39,7 +39,7 @@ def add_all(session: sqlalchemy.orm.session.Session,
             root: xml.etree.ElementTree.Element):
     """Add all RFC entries from XML `root` to sqlalchemy `session`."""
 
-    entries = findall(root, DocumentType.RFC)
+    entries = findall(root, 'rfc-entry')
     for entry in entries:
         doc_id = find_doc_id(entry)
         title = find_title(entry)
