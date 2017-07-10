@@ -22,7 +22,11 @@ def find_doc_id(entry: xml.etree.ElementTree.Element) -> int:
 
 def find_title(entry: xml.etree.ElementTree.Element) -> str:
     """Return the `title` element of `entry`."""
-    return entry.find('index:title', NAMESPACE).text
+    title = entry.find('index:title', NAMESPACE)
+    if title is not None:
+        return title.text
+    else:
+        return None
 
 
 def find_author(entry: xml.etree.ElementTree.Element) -> List[Dict[str, str]]:
