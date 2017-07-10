@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rfc-index xmlns="http://www.rfc-editor.org/rfc-index"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.rfc-editor.org/rfc-index
+                               http://www.rfc-editor.org/rfc-index.xsd">
+    <fyi-entry>
+        <doc-id>FYI0002</doc-id>
+        <is-also>
+            <doc-id>RFC1470</doc-id>
+        </is-also>
+    </fyi-entry>
+</rfc-index>
