@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rfc-index xmlns="http://www.rfc-editor.org/rfc-index"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.rfc-editor.org/rfc-index
+                               http://www.rfc-editor.org/rfc-index.xsd">
+    <rfc-not-issued-entry>
+        <doc-id>RFC0014</doc-id>
+    </rfc-not-issued-entry>
+</rfc-index>
