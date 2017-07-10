@@ -106,7 +106,7 @@ class TestParse(unittest.TestCase):
         self.assertEqual(7, month)
         self.assertIsNone(day)
 
-        year, month, day = parse.find_date(self.entries[1])  # 8174
+        year, month, day = parse.find_date(self.entries[2])  # 8174
         self.assertEqual(2017, year)
         self.assertEqual(5, month)
         self.assertEqual(1, day)
