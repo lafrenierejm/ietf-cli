@@ -10,7 +10,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 try:
     from ietf_cli.sql.base import Base
     from ietf_cli.sql.rfc import Abstract, Author, FileFormat, IsAlso,\
-        ObsoletedBy, Obsoletes, Rfc, SeeAlso, UpdatedBy, Updates
+        Keyword, ObsoletedBy, Obsoletes, Rfc, SeeAlso, UpdatedBy, Updates
     from ietf_cli.xml.enum import DocumentType, FileType, Status, Stream
 except:
     raise
@@ -31,7 +31,6 @@ class TestSqlRfc(unittest.TestCase):
 
         self.rfc0002 = Rfc(id=2, title='title for RFC 2',
                            date_month=2, date_year=2,
-                           keywords='keywords for RFC 2',
                            draft='draft for RFC 2',
                            notes='notes for RFC 2',
                            current_status=Status.UNKNOWN,
@@ -178,6 +177,57 @@ class TestSqlRfc(unittest.TestCase):
                          self.rfc0002_query.obsoletes[1].doc_id)
         self.assertEqual(DocumentType.STD,
                          self.rfc0002_query.obsoletes[1].doc_type)
+
+    def test_keywords(self):
+        # No keywords have been assigned
+        self.assertEqual(0, len(self.rfc0001.keywords))
+        self.assertEqual(0, len(self.rfc0002.keywords))
+
+        # Add keywords to the RFCs
+        self.rfc0001.keywords = [Keyword(word='first')]
+        self.rfc0002.keywords = [Keyword(word='first'),
+                                 Keyword(word='second')]
+        self.session.add(self.rfc0001)  # add the changes made to rfc0001
+        self.session.add(self.rfc0002)  # add the changes made to rfc0002
+        self.session.commit()  # commit the added changes
+
+        # Test rfc0001
+        self.rfc0001_query = self.session.query(Rfc).filter_by(id=1).one()
+        self.assertEqual(1, len(self.rfc0001_query.keywords))
+        self.assertEqual('first', self.rfc0001_query.keywords[0].word)
+
+        # Test rfc0002
+        self.rfc0002_query = self.session.query(Rfc).filter_by(id=2).one()
+        self.assertEqual(2, len(self.rfc0002_query.keywords))
+        self.assertEqual('first', self.rfc0002_query.keywords[0].word)
+        self.assertEqual('second', self.rfc0002_query.keywords[1].word)
+
+        # Query by 'first' keyword
+        self.first_query = self.session.query(Rfc).\
+            join(Keyword, Rfc.keywords).\
+            filter(Keyword.word == 'first').\
+            order_by(Rfc.id).\
+            all()
+        self.assertEqual(2, len(self.first_query))
+        self.assertEqual(self.rfc0001_query, self.first_query[0])
+        self.assertEqual(self.rfc0002_query, self.first_query[1])
+
+        # Query by 'second' keyword
+        self.second_query = self.session.query(Rfc).\
+            join(Keyword, Rfc.keywords).\
+            filter(Keyword.word == 'second').\
+            order_by(Rfc.id).\
+            all()
+        self.assertEqual(1, len(self.second_query))
+        self.assertEqual(self.rfc0002_query, self.second_query[0])
+
+        # Query by 'third' keyword
+        self.third_query = self.session.query(Rfc).\
+            join(Keyword, Rfc.keywords).\
+            filter(Keyword.word == 'third').\
+            order_by(Rfc.id).\
+            all()
+        self.assertEqual([], self.third_query)
 
     def test_obsoleted_by(self):
         self.assertEqual(0, len(self.rfc0001.obsoleted_by))  # none added

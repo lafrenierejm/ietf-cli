@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 from ietf_cli.sql.base import Base
 from ietf_cli.xml.enum import DocumentType, FileType, Status, Stream
-from sqlalchemy import BigInteger, Column, Enum, ForeignKey, Integer, String
+from sqlalchemy import BigInteger, Column, Enum, ForeignKey, Integer, String,\
+    Table
 from sqlalchemy.orm import relationship
 
 
@@ -64,6 +65,27 @@ class IsAlso(Base):
     def __repr__(self):
         return "<IsAlso(id='%s %d', host='%d')>" % (self.doc_type.value,
                                                     self.id, self.rfc_id)
+
+
+keyword_association_table = Table(
+    # Used for many-to-many mapping between Rfc and Keyword
+    'keyword_association',
+    Base.metadata,
+    Column('rfc_id', Integer, ForeignKey('rfc.id')),
+    Column('keyword_id', Integer, ForeignKey('keyword.id'))
+)
+
+
+class Keyword(Base):
+    __tablename__ = 'keyword'
+
+    id = Column(Integer, primary_key=True)
+    word = Column(String, nullable=False)
+    rfcs = relationship(
+        'Rfc',
+        secondary=keyword_association_table,
+        back_populates='keywords',
+    )
 
 
 class ObsoletedBy(Base):
@@ -153,7 +175,8 @@ class Rfc(Base):
     date_year = Column(Integer, nullable=False)
     formats = relationship('FileFormat', order_by=FileFormat.id,
                            back_populates='rfc')
-    keywords = Column(String)
+    keywords = relationship('Keyword', secondary=keyword_association_table,
+                            back_populates='rfcs')
     abstract = relationship('Abstract', order_by=Abstract.id,
                             back_populates='rfc')
     draft = Column(String)
