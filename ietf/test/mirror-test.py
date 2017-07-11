@@ -2,9 +2,7 @@
 import os
 import sys
 import unittest
-
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-from ietf_cli.mirror import assemble_rsync
+from ietf.cmd.mirror import assemble_rsync
 
 
 class TestAssembleRsync(unittest.TestCase):

@@ -1,20 +1,13 @@
 #!/usr/bin/env python3
+import ietf.xml.std as std
 import os
-import sys
 import unittest
 import xml.etree.ElementTree as ET
 
+from ietf.sql.base import Base
+from ietf.sql.std import Std
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-try:
-    import ietf_cli.xml.std as std
-
-    from ietf_cli.sql.base import Base
-    from ietf_cli.sql.std import Std
-except:
-    raise
 
 
 class TestXmlStd(unittest.TestCase):

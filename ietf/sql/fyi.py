@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from .base import Base
+from ietf.sql.base import Base
 from sqlalchemy import Column, Integer, String
 
 

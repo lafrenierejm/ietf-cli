@@ -1,15 +1,10 @@
 #!/usr/bin/env python3
 import os
-import sys
 import unittest
 import xml.etree.ElementTree as ET
+import ietf.xml.parse as parse
 
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-try:
-    import ietf_cli.xml.parse as parse
-    from ietf_cli.xml.enum import DocumentType, FileType, Status, Stream
-except:
-    raise
+from ietf.xml.enum import Status, Stream
 
 
 class TestParse(unittest.TestCase):

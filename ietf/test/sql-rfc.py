@@ -1,19 +1,13 @@
 #!/usr/bin/env python3
-import os
-import sys
 import unittest
 
+from ietf.sql.base import Base
+from ietf.sql.rfc import (Abstract, Author, FileFormat, IsAlso, Keyword,
+                          ObsoletedBy, Obsoletes, Rfc, SeeAlso, UpdatedBy,
+                          Updates,)
+from ietf.xml.enum import DocumentType, FileType, Status, Stream
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-try:
-    from ietf_cli.sql.base import Base
-    from ietf_cli.sql.rfc import Abstract, Author, FileFormat, IsAlso,\
-        Keyword, ObsoletedBy, Obsoletes, Rfc, SeeAlso, UpdatedBy, Updates
-    from ietf_cli.xml.enum import DocumentType, FileType, Status, Stream
-except:
-    raise
 
 
 class TestSqlRfc(unittest.TestCase):

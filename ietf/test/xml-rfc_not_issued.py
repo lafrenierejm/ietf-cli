@@ -1,19 +1,13 @@
 #!/usr/bin/env python3
 import os
-import sys
 import unittest
 import xml.etree.ElementTree as ET
 
+from ietf.sql.base import Base
+from ietf.sql.rfc_not_issued import RfcNotIssued
+from ietf.xml.rfc_not_issued import add_all
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-try:
-    from ietf_cli.sql.base import Base
-    from ietf_cli.sql.rfc_not_issued import RfcNotIssued
-    from ietf_cli.xml.rfc_not_issued import add_all
-except:
-    raise
 
 
 class TestXmlRfc(unittest.TestCase):

@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
-from .base import Base
+from ietf.sql.base import Base
 from sqlalchemy import Column, Integer, String
 
 
-class Bcp(Base):
-    __tablename__ = 'bcp'
+class Std(Base):
+    __tablename__ = 'std'
 
     id = Column(Integer, primary_key=True)
-    title = Column(String, nullable=True)
+    title = Column(String, nullable=False)
 
     def __repr__(self):
-        return "BCP(id={}, title={}".format(
+        return "StdEntry(id=STD{}, title={}".format(
             self.id, self.title)

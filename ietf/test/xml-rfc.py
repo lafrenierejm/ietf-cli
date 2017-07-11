@@ -1,21 +1,14 @@
 #!/usr/bin/env python3
+import ietf.xml.rfc as rfc
 import os
-import sys
 import unittest
 import xml.etree.ElementTree as ET
 
+from ietf.sql.base import Base
+from ietf.sql.rfc import Keyword, Rfc
+from ietf.xml.enum import DocumentType, FileType
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-try:
-    import ietf_cli.xml.rfc as rfc
-
-    from ietf_cli.sql.base import Base
-    from ietf_cli.sql.rfc import Keyword, Rfc
-    from ietf_cli.xml.enum import DocumentType, FileType
-except:
-    raise
 
 
 class TestXmlRfc(unittest.TestCase):

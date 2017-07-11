@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import argparse
-import cmd.mirror as mirror
+import ietf.cmd.mirror as mirror
 
 
 def main():

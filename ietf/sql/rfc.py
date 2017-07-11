@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-from ietf_cli.sql.base import Base
-from ietf_cli.xml.enum import DocumentType, FileType, Status, Stream
-from sqlalchemy import BigInteger, Column, Enum, ForeignKey, Integer, String,\
-    Table
+from ietf.sql.base import Base
+from ietf.xml.enum import DocumentType, FileType, Status, Stream
+from sqlalchemy import (BigInteger, Column, Enum, ForeignKey, Integer, String,
+                        Table,)
 from sqlalchemy.orm import relationship
 
 
