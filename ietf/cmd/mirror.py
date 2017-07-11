@@ -25,7 +25,7 @@ __EXCLUDE_DICT__ = {'charter': [],
                     'status': []}
 
 
-def _expand_path(path: int) -> str:
+def _expand_path(path: str) -> str:
     return os.path.expandvars(os.path.expanduser(path))
 
 
@@ -34,10 +34,12 @@ def _create_dir(path: str):
         os.makedirs(path)
     except FileExistsError:
         pass
+    except:
+        raise
 
 
 RsyncInfo = Tuple[List[str], str]
-def assemble_rsync(doc_type: str, top_dir: int, flat: bool) -> RsyncInfo:
+def assemble_rsync(doc_type: str, top_dir: str, flat: bool) -> RsyncInfo:
     # Add the rsync boilerplate
     command = ['rsync', '-az', '--delete-during']
 
@@ -60,7 +62,7 @@ def assemble_rsync(doc_type: str, top_dir: int, flat: bool) -> RsyncInfo:
 
 def mirror(args):
     # Set the top-level mirror directory
-    top_dir = _expand_path(args.dir[0])
+    top_dir = _expand_path(args.dir)
     # Attempt to create directory
     _create_dir(top_dir)
 
