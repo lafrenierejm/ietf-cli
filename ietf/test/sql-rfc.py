@@ -193,8 +193,11 @@ class TestSqlRfc(unittest.TestCase):
         # Test rfc0002
         self.rfc0002_query = self.session.query(Rfc).filter_by(id=2).one()
         self.assertEqual(2, len(self.rfc0002_query.keywords))
-        self.assertEqual('first', self.rfc0002_query.keywords[0].word)
-        self.assertEqual('second', self.rfc0002_query.keywords[1].word)
+        self.keywords = []
+        for keyword in self.rfc0002_query.keywords:
+            self.keywords.append(keyword.word)
+        self.assertIn('first', self.keywords)
+        self.assertIn('second', self.keywords)
 
         # Query by 'first' keyword
         self.first_query = self.session.query(Rfc).\
