@@ -1,11 +1,18 @@
 #!/usr/bin/env python3
-import os
-import argparse
-import typing
-from typing import List, Tuple
-
-from xdg import BaseDirectory
+from ietf.sql.base import Base
+from ietf.xml.bcp import add_all as add_all_bcp
+from ietf.xml.fyi import add_all as add_all_fyi
+from ietf.xml.rfc import add_all as add_all_rfc
+from ietf.xml.rfc_not_issued import add_all as add_all_rfc_not_issued
+from ietf.xml.std import add_all as add_all_std
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 from subprocess import Popen
+from typing import List, Tuple
+from xdg import BaseDirectory
+import argparse
+import os
+import xml.etree.ElementTree as ET
 
 __URI_DICT__ = {'charter': 'ietf.org::everything-ftp/ietf/',
                 'conflict': 'rsync.ietf.org::everything-ftp/conflict-reviews/',
@@ -60,6 +67,25 @@ def assemble_rsync(doc_type: str, top_dir: str, flat: bool) -> RsyncInfo:
     return command, dest_dir
 
 
+def _create_db(top_dir: str):
+    # Create the DB
+    db_path = os.path.join(top_dir, 'rfc-index.sqlite3')
+    engine = create_engine('sqlite:///{}'.format(db_path))
+    Base.metadata.create_all(engine, checkfirst=True)
+    session = sessionmaker(bind=engine)()
+    # Get the root of rfc-index.xml
+    xml_path = os.path.join(top_dir, 'rfc/rfc-index.xml')
+    tree = ET.parse(xml_path)
+    root = tree.getroot()
+    # Add all entries in root to session
+    add_all_bcp(session, root)
+    add_all_fyi(session, root)
+    add_all_rfc_not_issued(session, root)
+    add_all_rfc(session, root)
+    add_all_std(session, root)
+    session.commit()
+
+
 def mirror(args):
     # Set the top-level mirror directory
     top_dir = _expand_path(args.dir)
@@ -90,6 +116,9 @@ def mirror(args):
 
     # Wait for each rsync process to complete
     exitcodes = [p.wait() for p in processes]
+
+    if (args.type is None) and (not args.flat):
+        _create_db(top_dir)
 
 
 def add_subparser(subparsers: argparse._SubParsersAction):
