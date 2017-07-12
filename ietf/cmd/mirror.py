@@ -130,7 +130,7 @@ def add_subparser(subparsers: argparse._SubParsersAction):
         '-d', '--dir',
         type=str,
         nargs=1,  # exactly 1 argument
-        default=BaseDirectory.save_data_path('ietf-cli'),
+        default=BaseDirectory.save_data_path('ietf'),
         help='top-level destination of local mirror')
     parser.add_argument(
         '--flat',
