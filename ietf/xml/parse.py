@@ -14,7 +14,7 @@ def findall(root: xml.etree.ElementTree.Element, entry_type: str) -> List[xml.et
 
 def find_doc_id(entry: xml.etree.ElementTree.Element) -> int:
     """Retrieve the numerical part of `entry`'s ID"""
-    doc_id = entry.find('index:doc-id', NAMESPACE).text
+    doc_id = entry.find('index:doc-id', NAMESPACE).text.strip()
     # Strip the three DocumentType letters off the ID
     return int(doc_id[3:])
 
@@ -23,7 +23,7 @@ def find_title(entry: xml.etree.ElementTree.Element) -> str:
     """Return the `title` element of `entry`."""
     title = entry.find('index:title', NAMESPACE)
     if title is not None:
-        return title.text
+        return title.text.strip()
     else:
         return None
 
@@ -43,7 +43,7 @@ def find_author(entry: xml.etree.ElementTree.Element) -> List[Dict[str, str]]:
         author = {}
 
         # Set author's name
-        name = author_entry.find('index:name', NAMESPACE).text
+        name = author_entry.find('index:name', NAMESPACE).text.strip()
         author['name'] = name
 
         # Set author's title, which is not guaranteed to exist
@@ -53,6 +53,8 @@ def find_author(entry: xml.etree.ElementTree.Element) -> List[Dict[str, str]]:
             title = None
         except:
             raise
+        else:
+            title = title.strip()
         author['title'] = title
 
         # Set author's organization, which is not guaranteed to exist
@@ -72,6 +74,8 @@ def find_author(entry: xml.etree.ElementTree.Element) -> List[Dict[str, str]]:
             org_abbrev = None
         except:
             raise
+        else:
+            org_abbrev = org_abbrev.strip()
         author['org_abbrev'] = org_abbrev
 
         # Add author to the list of authors
@@ -96,7 +100,7 @@ def find_date(entry: xml.etree.ElementTree.Element) -> Tuple[int, int, int]:
     year = int(date_entry.find('index:year', NAMESPACE).text)
 
     # Set date's month
-    month_str = date_entry.find('index:month', NAMESPACE).text
+    month_str = date_entry.find('index:month', NAMESPACE).text.strip()
     month = Month[month_str].value
 
     # Set date's day of the month, which is not guaranteed to exist
@@ -130,7 +134,7 @@ def find_format(entry: xml.etree.ElementTree.Element) -> List[Tuple[FileType,
     for format_entry in format_entries:
         # Get the file format
         file_format = FileType(format_entry.find('index:file-format',
-                                                 NAMESPACE).text)
+                                                 NAMESPACE).text.strip())
 
         # Get the character count
         char_count = int(format_entry.find('index:char-count', NAMESPACE).text)
@@ -182,7 +186,7 @@ def find_abstract(entry: xml.etree.ElementTree.Element) -> List[str]:
         abstract_pars = entry.find('index:abstract', NAMESPACE).\
             findall('index:p', NAMESPACE)
         for abstract_par in abstract_pars:
-            abstract.append(abstract_par.text)
+            abstract.append(abstract_par.text.strip())
     except AttributeError:
         pass
     except:
@@ -196,7 +200,7 @@ def find_draft(entry: xml.etree.ElementTree.Element) -> str:
     draft = entry.find('index:draft', NAMESPACE)
 
     if draft is not None:
-        return draft.text
+        return draft.text.strip()
     else:
         return None
 
@@ -206,7 +210,7 @@ def find_notes(entry: xml.etree.ElementTree.Element) -> str:
     notes = entry.find('index:notes', NAMESPACE)
 
     if notes is not None:
-        return notes.text
+        return notes.text.strip()
     else:
         return None
 
@@ -390,7 +394,7 @@ def find_errata_url(entry: xml.etree.ElementTree.Element) -> str:
     errata_entry = entry.find('index:errata-url', NAMESPACE)
 
     if errata_entry is not None:
-        return errata_entry.text
+        return errata_entry.text.strip()
     else:
         return None
 
