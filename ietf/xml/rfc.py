@@ -28,6 +28,18 @@ from .parse import findall,\
 import sqlalchemy.orm
 import xml.etree.ElementTree
 
+
+def _add_keyword(session: sqlalchemy.orm.session.Session,
+                 word: str,
+                 ) -> Keyword:
+    """Create Keyword instances without violating uniqueness restraint."""
+    keyword = session.query(Keyword).filter(Keyword.word == word).one_or_none()
+    if keyword is None:
+        keyword = Keyword(word)
+        session.add(keyword)
+    return keyword
+
+
 def add_all(session: sqlalchemy.orm.session.Session,
             root: xml.etree.ElementTree.Element):
     """Add all RFC entries from XML `root` to sqlalchemy `session`."""
@@ -84,9 +96,10 @@ def add_all(session: sqlalchemy.orm.session.Session,
             rfc.formats.append(FileFormat(filetype=filetype,
                                           char_count=char_count,
                                           page_count=page_count))
-        for keyword in keywords:
+        for word in keywords:
             # Add keywords to rfc
-            rfc.keywords.append(Keyword(word=keyword))
+            keyword = _add_keyword(session, word)
+            rfc.keywords.append(keyword)
         for par in abstract_pars:
             # Add abstract to rfc
             rfc.abstract.append(Abstract(par=par))

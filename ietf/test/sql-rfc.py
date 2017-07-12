@@ -6,6 +6,7 @@ from ietf.sql.rfc import (Abstract, Author, FileFormat, IsAlso, Keyword,
                           ObsoletedBy, Obsoletes, Rfc, SeeAlso, UpdatedBy,
                           Updates,)
 from ietf.xml.enum import DocumentType, FileType, Status, Stream
+from ietf.xml.rfc import _add_keyword as add_keyword
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -178,9 +179,9 @@ class TestSqlRfc(unittest.TestCase):
         self.assertEqual(0, len(self.rfc0002.keywords))
 
         # Add keywords to the RFCs
-        self.rfc0001.keywords = [Keyword(word='first')]
-        self.rfc0002.keywords = [Keyword(word='first'),
-                                 Keyword(word='second')]
+        self.rfc0001.keywords.append(add_keyword(self.session, 'first'))
+        self.rfc0002.keywords.append(add_keyword(self.session, 'first'))
+        self.rfc0002.keywords.append(add_keyword(self.session, 'second'))
         self.session.add(self.rfc0001)  # add the changes made to rfc0001
         self.session.add(self.rfc0002)  # add the changes made to rfc0002
         self.session.commit()  # commit the added changes

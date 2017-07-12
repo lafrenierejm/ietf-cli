@@ -67,12 +67,12 @@ class IsAlso(Base):
                                                     self.id, self.rfc_id)
 
 
-keyword_association_table = Table(
+rfc_keyword = Table(
     # Used for many-to-many mapping between Rfc and Keyword
-    'keyword_association',
+    'rfc_keyword',
     Base.metadata,
-    Column('rfc_id', Integer, ForeignKey('rfc.id')),
-    Column('keyword_id', Integer, ForeignKey('keyword.id'))
+    Column('rfc_id', ForeignKey('rfc.id'), primary_key=True),
+    Column('keyword_id', ForeignKey('keyword.id'), primary_key=True)
 )
 
 
@@ -80,12 +80,15 @@ class Keyword(Base):
     __tablename__ = 'keyword'
 
     id = Column(Integer, primary_key=True)
-    word = Column(String, nullable=False)
+    word = Column(String, nullable=False, unique=True)
     rfcs = relationship(
         'Rfc',
-        secondary=keyword_association_table,
+        secondary=rfc_keyword,
         back_populates='keywords',
     )
+
+    def __init__(self, word):
+        self.word = word
 
 
 class ObsoletedBy(Base):
@@ -175,7 +178,7 @@ class Rfc(Base):
     date_year = Column(Integer, nullable=False)
     formats = relationship('FileFormat', order_by=FileFormat.id,
                            back_populates='rfc')
-    keywords = relationship('Keyword', secondary=keyword_association_table,
+    keywords = relationship('Keyword', secondary=rfc_keyword,
                             back_populates='rfcs')
     abstract = relationship('Abstract', order_by=Abstract.id,
                             back_populates='rfc')

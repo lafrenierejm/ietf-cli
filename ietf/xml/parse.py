@@ -156,16 +156,19 @@ def find_format(entry: xml.etree.ElementTree.Element) -> List[Tuple[FileType,
 
 def find_keywords(entry: xml.etree.ElementTree.Element) -> List[str]:
     """Return the list of keywords describing `entry`."""
+
     keywords = []
     try:
-        keyword_elems = entry.find('index:keywords', NAMESPACE).\
-                              findall('index:kw', NAMESPACE)
-        for keyword in keyword_elems:
-            keywords.append(keyword.text)
+        elements = entry.find('index:keywords', NAMESPACE).\
+                         findall('index:kw', NAMESPACE)
+        for element in elements:
+            if element.text:  # Do not add empty strings
+                keywords.append(element.text.strip())
     except AttributeError:
         pass
     except:
         raise
+
     return keywords
 
 

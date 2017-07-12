@@ -124,6 +124,19 @@ class TestParse(unittest.TestCase):
             page_count
         )
 
+    def test_find_keywords(self):
+        keywords = parse.find_keywords(self.entries[0])  # RFC 8180
+        self.assertEqual(0, len(keywords))
+
+        keywords = parse.find_keywords(self.entries[1])  # RFC 0010
+        self.assertEqual(2, len(keywords))
+        self.assertEqual('One', keywords[0])
+        self.assertEqual('Two', keywords[1])
+
+        keywords = parse.find_keywords(self.entries[2])  # RFC 8174
+        self.assertEqual(1, len(keywords))
+        self.assertEqual('One', keywords[0])
+
     def test_find_abstract(self):
         abstract = parse.find_abstract(self.entries[0])  # RFC 8180
         self.assertEqual(1, len(abstract))
