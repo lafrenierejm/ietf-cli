@@ -359,14 +359,15 @@ def find_publication_status(entry: xml.etree.ElementTree.Element) -> Status:
     return Status(entry.find('index:publication-status', NAMESPACE).text)
 
 
-def find_stream(entry: xml.etree.ElementTree.Element) -> Status:
+def find_stream(entry: xml.etree.ElementTree.Element) -> List[Stream]:
     """Return the `stream` element of `entry`."""
-    stream_entry = entry.find('index:stream', NAMESPACE)
+    stream_entries = entry.findall('index:stream', NAMESPACE)
 
-    if stream_entry is not None:
-        return Stream(stream_entry.text)
-    else:
-        return None
+    streams = []
+    for stream_entry in stream_entries:
+        streams.append(Stream(stream_entry.text))
+
+    return streams
 
 
 def find_area(entry: xml.etree.ElementTree.Element) -> str:

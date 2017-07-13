@@ -3,9 +3,9 @@ import unittest
 
 from ietf.sql.base import Base
 from ietf.sql.rfc import (Abstract, Author, FileFormat, IsAlso, Keyword,
-                          ObsoletedBy, Obsoletes, Rfc, SeeAlso, UpdatedBy,
-                          Updates,)
-from ietf.xml.enum import DocumentType, FileType, Status, Stream
+                          ObsoletedBy, Obsoletes, Rfc, SeeAlso, Stream,
+                          UpdatedBy, Updates,)
+from ietf.xml.enum import DocumentType, FileType, Status, Stream as StreamEnum
 from ietf.xml.rfc import _add_keyword as add_keyword
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -30,7 +30,6 @@ class TestSqlRfc(unittest.TestCase):
                            notes='notes for RFC 2',
                            current_status=Status.UNKNOWN,
                            publication_status=Status.UNKNOWN,
-                           stream=Stream.IETF,
                            area='area for RFC 2',
                            wg_acronym='wg_acronym for RFC 2',
                            errata_url='errata_url for RFC 2',
@@ -406,6 +405,36 @@ class TestSqlRfc(unittest.TestCase):
                          self.rfc0002_query.see_also[1].doc_id)
         self.assertEqual(DocumentType.STD,
                          self.rfc0002_query.see_also[1].doc_type)
+
+    def test_stream(self):
+        self.assertEqual(0, len(self.rfc0001.stream))  # none added
+        self.assertEqual(0, len(self.rfc0002.stream))  # none added
+
+        # Add stream information to the RFCs
+        self.rfc0001.stream = [Stream(StreamEnum['IETF'])]
+        self.rfc0002.stream = [Stream(StreamEnum['IETF']),
+                               Stream(StreamEnum['LEGACY'])]
+        self.session.add(self.rfc0001)  # add the changes made to rfc0001
+        self.session.add(self.rfc0002)  # add the changes made to rfc0002
+        self.session.commit()  # commit the added changes
+
+        # Get the RFC entries from the DB
+        self.rfc0001_query = self.session.query(Rfc).\
+            filter_by(id=1).one()
+        self.rfc0002_query = self.session.query(Rfc).\
+            filter_by(id=2).one()
+
+        # Assertions about rfc0001
+        self.assertEqual(1, len(self.rfc0001_query.stream))
+        self.assertEqual(StreamEnum['IETF'],
+                         self.rfc0001_query.stream[0].stream)
+
+        # Assertions about rfc0002
+        self.assertEqual(2, len(self.rfc0002_query.stream))
+        self.assertEqual(StreamEnum['IETF'],
+                         self.rfc0002_query.stream[0].stream)
+        self.assertEqual(StreamEnum['LEGACY'],
+                         self.rfc0002_query.stream[1].stream)
 
 
 if __name__ == '__main__':

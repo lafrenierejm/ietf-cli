@@ -1,8 +1,8 @@
 import sqlalchemy.orm
 import xml.etree.ElementTree
 from ietf.sql.rfc import (Abstract, Author, FileFormat, IsAlso, Keyword,
-                          ObsoletedBy, Obsoletes, Rfc, SeeAlso, UpdatedBy,
-                          Updates)
+                          ObsoletedBy, Obsoletes, Rfc, SeeAlso, Stream,
+                          UpdatedBy, Updates,)
 import ietf.xml.parse as parse
 
 
@@ -40,7 +40,7 @@ def add_all(session: sqlalchemy.orm.session.Session,
         see_also = parse.find_see_also(entry)
         cur_status = parse.find_current_status(entry)
         pub_status = parse.find_publication_status(entry)
-        stream = parse.find_stream(entry)
+        streams = parse.find_stream(entry)
         area = parse.find_area(entry)
         wg = parse.find_wg_acronym(entry)
         errata = parse.find_errata_url(entry)
@@ -55,7 +55,6 @@ def add_all(session: sqlalchemy.orm.session.Session,
             notes=notes,
             current_status=cur_status,
             publication_status=pub_status,
-            stream=stream,
             area=area,
             wg_acronym=wg,
             errata_url=errata,
@@ -105,5 +104,8 @@ def add_all(session: sqlalchemy.orm.session.Session,
             # Add see_also to rfc
             doc_type, doc_id = doc
             rfc.see_also.append(SeeAlso(doc_id=doc_id, doc_type=doc_type))
+        for value in streams:
+            # Add stream to rfc
+            rfc.stream.append(Stream(value))
 
         session.add(rfc)

@@ -136,6 +136,22 @@ class SeeAlso(Base):
             % (self.doc_type.value, self.id, self.rfc_id)
 
 
+class Stream(Base):
+    __tablename__ = 'stream'
+
+    id = Column(Integer, primary_key=True)
+    stream = Column(Enum(Stream), nullable=False)
+    rfc_id = Column(Integer, ForeignKey('rfc.id'))
+
+    rfc = relationship('Rfc', back_populates='stream')
+
+    def __init__(self, stream):
+        self.stream = stream
+
+    def __repr__(self):
+        return self.stream.value
+
+
 class UpdatedBy(Base):
     __tablename__ = 'updated_by'
 
@@ -197,7 +213,8 @@ class Rfc(Base):
                             back_populates='rfc')
     current_status = Column(Enum(Status), nullable=False)
     publication_status = Column(Enum(Status), nullable=False)
-    stream = Column(Enum(Stream))
+    stream = relationship('Stream', order_by=Stream.id,
+                          back_populates='rfc')
     area = Column(String)
     wg_acronym = Column(String)
     errata_url = Column(String)
