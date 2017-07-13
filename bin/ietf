@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import argparse
 import ietf.cmd.mirror as mirror
+import ietf.cmd.rfc as rfc
 
 
 def main():
@@ -9,6 +10,7 @@ def main():
                                        help='subcommand help')
     subparsers.required = True  # Require a subcommand
     mirror.add_subparser(subparsers)  # Add parser for `mirror` subcommand
+    rfc.add_subparser(subparsers)  # Add parser for `rfc` subcommand
     args = parser.parse_args()  # Parse the supplied arguments
     args.func(args)  # Run the specified (sub)command
 
