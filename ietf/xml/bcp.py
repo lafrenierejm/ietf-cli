@@ -1,9 +1,9 @@
-from ..sql.bcp import Bcp
-from .enum import DocumentType
-from .parse import findall, find_doc_id, find_title
-
+from ietf.sql.bcp import Bcp
+from ietf.xml.enum import DocumentType
+from ietf.xml.parse import findall, find_doc_id, find_title
 import sqlalchemy.orm
 import xml.etree.ElementTree
+
 
 def add_all(session: sqlalchemy.orm.session.Session,
             root: xml.etree.ElementTree.Element):
