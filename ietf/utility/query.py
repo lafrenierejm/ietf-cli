@@ -26,6 +26,13 @@ def query_rfc(session, number):
     return row
 
 
+def query_bcp(session, number):
+    row = session.query(Bcp).\
+                  filter(Bcp.id == number).\
+                  one_or_none()
+    return row
+
+
 def query_fyi(session, number):
     row = session.query(Fyi).\
                   filter(Fyi.id == number).\
