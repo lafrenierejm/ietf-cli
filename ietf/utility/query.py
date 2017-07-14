@@ -26,6 +26,29 @@ def query_rfc(session, number):
     return row
 
 
+def query_rfc_by_updates(session, number):
+    """Return the most up-to-date document for RFC `number`."""
+    orig = query_rfc(session, number)
+    # If there are no updates then return the original
+    if (orig is None) or (not orig.updated_by):
+        return orig
+    # Else return the latest document
+    else:
+        update_doc = orig.updated_by[-1]
+        update_type = update_doc.doc_type
+        update_id = update_doc.doc_id
+        if update_type is DocumentType.RFC:
+            return query_rfc(session, update_id)
+        elif update_type is DocumentType.STD:
+            return query_std(session, update_id)
+        elif update_type is DocumentType.BCP:
+            return query_bcp(session, update_id)
+        elif update_type is DocumentType.FYI:
+            return query_fyi(session, update_id)
+        else:
+            return orig
+
+
 def query_std(session, number):
     row = session.query(Std).\
                   filter(Std.id == number).\
