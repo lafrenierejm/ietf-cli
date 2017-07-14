@@ -63,6 +63,29 @@ def query_rfc_by_obsoletes(session, number):
         return query_rfc_by_obsoletes(session, obsoleting_id)
 
 
+def query_rfc_by_is_also(session, number):
+    """Return aliases for RFC `number`."""
+    # Lookup RFC `number`
+    rfc = query_rfc(session, number)
+    #
+    aliases = []
+    if rfc and rfc.is_also:
+        for alias in rfc.is_also:
+            alias_type = alias.doc_type
+            alias_id = alias.doc_id
+        if alias_type is DocumentType.RFC:
+            aliases.append(query_rfc(session, alias_id))
+        elif alias_type is DocumentType.STD:
+            aliases.append(query_std(session, alias_id))
+        elif alias_type is DocumentType.BCP:
+            aliases.append(query_bcp(session, alias_id))
+        elif alias_type is DocumentType.FYI:
+            aliases.append(query_fyi(session, alias_id))
+        else:
+            aliases.append(alias)
+    return aliases
+
+
 def query_std(session, number):
     row = session.query(Std).\
                   filter(Std.id == number).\
