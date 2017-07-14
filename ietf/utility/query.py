@@ -49,6 +49,20 @@ def query_rfc_by_updates(session, number):
             return orig
 
 
+def query_rfc_by_obsoletes(session, number):
+    """Return the latest RFC that obsoletes `number` if such an RFC exists,
+    otherwise return RFC `number`."""
+    # Lookup RFC `number`
+    cur_rfc = query_rfc(session, number)
+    # If there is no updated_by then return the original
+    if (cur_rfc is None) or (not cur_rfc.obsoleted_by):
+        return cur_rfc
+    # Else recurse
+    else:
+        obsoleting_id = cur_rfc.obsoleted_by[-1].doc_id
+        return query_rfc_by_obsoletes(session, obsoleting_id)
+
+
 def query_std(session, number):
     row = session.query(Std).\
                   filter(Std.id == number).\
