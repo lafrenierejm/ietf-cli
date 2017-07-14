@@ -15,7 +15,7 @@ def get_db_session():
     return session
 
 
-def query_rfc_by_id(session, number):
+def query_rfc(session, number):
     row = session.query(Rfc).\
                   filter(Rfc.id == number).\
                   one_or_none()
