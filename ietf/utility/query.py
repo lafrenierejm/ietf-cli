@@ -86,6 +86,10 @@ def query_rfc_by_is_also(session, number):
     return aliases
 
 
+def query_rfc_by_see_also(session, number):
+    return None
+
+
 def query_std(session, number):
     row = session.query(Std).\
                   filter(Std.id == number).\
