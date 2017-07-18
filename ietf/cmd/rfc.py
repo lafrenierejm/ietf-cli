@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
+from ietf.utility.environment import (get_editor, get_file, get_pager)
 from ietf.utility.query import (get_db_session, query_rfc,
                                 query_rfc_by_updates, query_rfc_by_obsoletes,
                                 query_rfc_by_is_also, query_rfc_by_see_also,)
+from subprocess import run
 import sys
 
 
@@ -68,6 +70,28 @@ def sort_preserve_order(sequence):
     return [x for x in sequence if not (x in seen or seen_add(x))]
 
 
+def show_docs(docs, edit, page):
+    """Display the passed documents."""
+    # Get the command to run (if any)
+    if edit:
+        cmd = get_editor()
+    elif page:
+        cmd = get_pager()
+    # Run `cmd` on the passed docs if `cmd` exists.
+    if 'cmd' in vars():
+        added_to_cmd = False  # To see if any files actually exist
+        for doc in docs:
+            file_path = get_file(doc)  # Get the doc's plaintext file
+            if file_path:
+                added_to_cmd = True  # We have a reason to run `cmd`
+                cmd.append(file_path)  # Add the path as an argument to `cmd`
+        if added_to_cmd:
+            run(cmd)  # Block while running external process
+    # Otherwise print to stdout
+    else:
+        for doc in docs:
+            print(doc)
+            print()  # newline
 
 
 def add_subparser(parent_parser):
