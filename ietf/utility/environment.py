@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+from ietf.sql.bcp import Bcp
+from ietf.sql.fyi import Fyi
+from ietf.sql.rfc import Rfc
+from ietf.sql.std import Std
 from xdg import BaseDirectory
 import os
 import sys
@@ -50,3 +54,38 @@ def get_editor():
         sys.exit(2)
     editor_cmd = editor.split()  # Split the returned string into a list
     return editor_cmd
+
+
+def get_file(document):
+    """Return the path for the given document."""
+    doc_id = document.id
+    if isinstance(document, Bcp):
+        bcp_dir = get_app_dir('rfc/bcp')
+        bcp_file = os.path.join(bcp_dir, "bcp{}.txt".format(doc_id))
+        if not os.path.isfile(bcp_file):
+            return None
+        else:
+            return bcp_file
+    elif isinstance(document, Fyi):
+        fyi_dir = get_app_dir('rfc/fyi')
+        fyi_file = os.path.join(fyi_dir, "fyi{}.txt".format(doc_id))
+        if not os.path.isfile(fyi_file):
+            return None
+        else:
+            return fyi_file
+    elif isinstance(document, Rfc):
+        rfc_dir = get_app_dir('rfc')
+        rfc_file = os.path.join(rfc_dir, "rfc{}.txt".format(doc_id))
+        if not os.path.isfile(rfc_file):
+            return None
+        else:
+            return rfc_file
+    elif isinstance(document, Std):
+        std_dir = get_app_dir('std')
+        std_file = os.path.join(std_dir, "std{}.txt".format(doc_id))
+        if not os.path.isfile(std_file):
+            return None
+        else:
+            return std_file
+    else:
+        return None
