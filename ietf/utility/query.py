@@ -5,6 +5,7 @@ from ietf.xml.enum import DocumentType
 from ietf.sql.bcp import Bcp
 from ietf.sql.fyi import Fyi
 from ietf.sql.rfc import Rfc
+from ietf.sql.rfc_not_issued import RfcNotIssued
 from ietf.sql.std import Std
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -88,6 +89,14 @@ def query_rfc_by_is_also(session, number):
 
 def query_rfc_by_see_also(session, number):
     return None
+
+
+def query_rfc_not_issued(session, number):
+    """Return an RfcNotIssued object or None."""
+    row = session.query(RfcNotIssued).\
+                  filter(RfcNotIssued.id == number).\
+                  one_or_none()
+    return row
 
 
 def query_std(session, number):

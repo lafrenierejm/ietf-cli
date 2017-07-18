@@ -2,7 +2,8 @@
 from ietf.utility.environment import (get_editor, get_file, get_pager)
 from ietf.utility.query import (get_db_session, query_rfc,
                                 query_rfc_by_updates, query_rfc_by_obsoletes,
-                                query_rfc_by_is_also, query_rfc_by_see_also,)
+                                query_rfc_by_is_also, query_rfc_by_see_also,
+                                query_rfc_not_issued,)
 from subprocess import run
 import sys
 
@@ -19,19 +20,19 @@ def get_docs(args):
             if doc is not None:
                 docs.append(doc)
             else:
-                dne.append("RFC {} does not exist.".format(number))
+                dne.append(choose_dne_string(db_session, number))
     elif args.obsoletes:
         for number in numbers:
             rfc = query_rfc_by_obsoletes(db_session, number)
             if rfc is not None:
                 docs.append(rfc)
             else:
-                dne.append("RFC {} does not exist.".format(number))
+                dne.append(choose_dne_string(db_session, number))
     elif args.is_also:
         for number in numbers:
             rfc = query_rfc(db_session, number)
             if rfc is None:
-                dne.append("RFC {} does not exist.".format(number))
+                dne.append(choose_dne_string(db_session, number))
             else:
                 aliases = query_rfc_by_is_also(db_session, number)
                 docs.extend(aliases)
@@ -41,14 +42,14 @@ def get_docs(args):
             if reference is not None:
                 docs.append(reference)
             else:
-                dne.append("RFC {} does not exist.".format(number))
+                dne.append(choose_dne_string(db_session, number))
     else:
         for number in numbers:
             rfc = query_rfc(db_session, number)
             if rfc is not None:
                 docs.append(rfc)
             else:
-                dne.append("RFC {} does not exist.".format(number))
+                dne.append(choose_dne_string(db_session, number))
 
     # Display found documents
     show_docs(sort_preserve_order(docs), args.editor, args.pager)
@@ -58,6 +59,13 @@ def get_docs(args):
 
     # Exit successfully
     sys.exit(0)
+
+
+def choose_dne_string(db_session, number):
+    if query_rfc_not_issued(db_session, number):  # If exists but not issued
+        return "RFC {} was never issued.".format(number)
+    else:
+        return "RFC {} does not exist.".format(number)
 
 
 def sort_preserve_order(sequence):
