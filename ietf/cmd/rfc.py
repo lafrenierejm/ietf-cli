@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 from ietf.utility.environment import (get_editor, get_file, get_pager)
-from ietf.utility.query import (get_db_session, query_rfc,
-                                query_rfc_by_updates, query_rfc_by_obsoletes,
-                                query_rfc_by_is_also, query_rfc_by_see_also,
-                                query_rfc_not_issued,)
+from ietf.utility.query_doc import (get_db_session, query_rfc,
+                                    query_rfc_by_updates,
+                                    query_rfc_by_obsoletes,
+                                    query_rfc_by_is_also,
+                                    query_rfc_by_see_also,
+                                    query_rfc_not_issued,)
 from subprocess import run
 import sys
 
