@@ -70,6 +70,36 @@ def query_author_by_org(Session, orgs):
     return query_to_run
 
 
+def query_author_by_orgabbrev(Session, abbrevs):
+    """Return a query that, if run, would return all RFCs whose authors'
+    abbreviations match every string in `abbrevs`.
+
+    The matching on `abbrevs` is case-insensitive.  Asterisks (*) in passed
+    abbreviations are replaced with percent signs (%) to function as wildcards
+    in the actual SQL query.
+    """
+    # Assemble a query for each abbrev
+    queries = []  # Empty list to store queries
+    for abbrev in abbrevs:
+        abbrev = abbrev.replace('*', '%')  # Substitute wildcard character
+        # Attempt an exact search
+        query = Session.query(Rfc).join(Author).\
+            filter(Author.org_abbrev == abbrev)
+        if query.first():  # If that returns something, add the query
+            queries.append(query)
+        else:  # Otherwise add a case-insensitive query
+            queries.append(
+                Session.query(Rfc).join(Author).
+                filter(Author.org_abbrev.ilike(abbrev))
+            )
+    # Build a query of intersections
+    query_to_run = queries[0]  # Assign first query
+    for query in queries[1:]:  # Start at second element in list
+        query_to_run = query_to_run.intersect(query)
+    # Return the built query
+    return query_to_run
+
+
 def query_author_by_title(Session, titles):
     """Return a query that, if run, would return all RFCs whose authors' titles
     match every string in `titles`.

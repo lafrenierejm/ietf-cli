@@ -3,6 +3,7 @@ from ietf.sql.rfc import Rfc
 from ietf.utility.environment import (get_editor, get_file, get_pager)
 from ietf.utility.query_author import (query_author_by_name,
                                        query_author_by_org,
+                                       query_author_by_orgabbrev,
                                        query_author_by_title)
 from ietf.utility.query_doc import (get_db_session)
 from subprocess import run
@@ -22,6 +23,10 @@ def get_rfcs(args):
     if args.organization:
         query = query.intersect(
             query_author_by_org(Session, args.organization)
+        )
+    if args.org_abbreviation:
+        query = query.intersect(
+            query_author_by_orgabbrev(Session, args.org_abbreviation)
         )
     # Run the assembled query
     rfcs = query.order_by(Rfc.id).all()
@@ -98,6 +103,13 @@ def add_subparser(parent_parser):
         nargs='+',
         metavar=('ORG'),
         help='query by author.organization',
+    )
+    parser.add_argument(
+        '-a', '--org_abbreviation',
+        type=str,
+        nargs='+',
+        metavar=('ABBREV'),
+        help='query by author.org_abbrev',
     )
 
     # Pass arguments to `get_rfcs()`
