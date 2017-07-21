@@ -7,8 +7,7 @@ import ietf.cmd.rfc as rfc
 
 def main():
     parser = argparse.ArgumentParser()
-    subparsers = parser.add_subparsers(dest='subcommand',
-                                       help='subcommand help')
+    subparsers = parser.add_subparsers(dest='subcommand')
     subparsers.required = True  # Require a subcommand
     author.add_subparser(subparsers)  # Add parser for `author` subcommand
     mirror.add_subparser(subparsers)  # Add parser for `mirror` subcommand
