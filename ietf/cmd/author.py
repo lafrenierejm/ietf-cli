@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 from ietf.sql.rfc import Rfc
 from ietf.utility.environment import (get_editor, get_file, get_pager)
-from ietf.utility.query_author import (query_author_by_name)
+from ietf.utility.query_author import (query_author_by_name,
+                                       query_author_by_title)
 from ietf.utility.query_doc import (get_db_session)
 from subprocess import run
 import sys
@@ -15,11 +16,11 @@ def get_rfcs(args):
     # Add argument queries
     if args.name:
         query = query.intersect(query_author_by_name(Session, args.name))
-
+    if args.title:
+        query = query.intersect(query_author_by_title(Session, args.title))
     # Run the assembled query
     rfcs = query.order_by(Rfc.id).all()
     show_docs(rfcs, args.editor, args.pager)  # Display found documents
-
     # Exit successfully
     sys.exit(0)
 
@@ -74,6 +75,15 @@ def add_subparser(parent_parser):
         type=str,
         nargs='+',
         help='query by author.name',
+    )
+
+    # Query by authors' titles
+    parser.add_argument(
+        '-t', '--title',
+        type=str,
+        nargs='+',
+        metavar=('TITLE'),
+        help='query by author.title',
     )
 
     # Pass arguments to `get_rfcs()`
