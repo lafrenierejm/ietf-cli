@@ -93,7 +93,7 @@ def get_file(document):
         else:
             return rfc_file
     elif isinstance(document, Std):
-        std_dir = get_app_dir('std')
+        std_dir = get_app_dir('rfc/std')
         std_file = os.path.join(std_dir, "std{}.txt".format(doc_id))
         if not os.path.isfile(std_file):
             return None
