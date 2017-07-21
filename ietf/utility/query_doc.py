@@ -14,7 +14,7 @@ def query_rfc(session, number):
     return row
 
 
-def query_rfc_by_updates(session, number):
+def query_rfc_updates(session, number):
     """Return the most up-to-date document for RFC `number`."""
     orig = query_rfc(session, number)
     # If there are no updates then return the original
@@ -37,7 +37,7 @@ def query_rfc_by_updates(session, number):
             return orig
 
 
-def query_rfc_by_obsoletes(session, number):
+def query_rfc_obsoletes(session, number):
     """Return the latest RFC that obsoletes `number` if such an RFC exists,
     otherwise return RFC `number`."""
     # Lookup RFC `number`
@@ -48,10 +48,10 @@ def query_rfc_by_obsoletes(session, number):
     # Else recurse
     else:
         obsoleting_id = cur_rfc.obsoleted_by[-1].doc_id
-        return query_rfc_by_obsoletes(session, obsoleting_id)
+        return query_rfc_obsoletes(session, obsoleting_id)
 
 
-def query_rfc_by_is_also(session, number):
+def query_rfc_is_also(session, number):
     """Return aliases for RFC `number`."""
     # Lookup RFC `number`
     rfc = query_rfc(session, number)
@@ -74,7 +74,7 @@ def query_rfc_by_is_also(session, number):
     return aliases
 
 
-def query_rfc_by_see_also(session, number):
+def query_rfc_see_also(session, number):
     return None
 
 

@@ -2,10 +2,10 @@
 from ietf.utility.environment import (get_db_session, get_editor, get_file,
                                       get_pager)
 from ietf.utility.query_doc import (query_rfc,
-                                    query_rfc_by_updates,
-                                    query_rfc_by_obsoletes,
-                                    query_rfc_by_is_also,
-                                    query_rfc_by_see_also,
+                                    query_rfc_updates,
+                                    query_rfc_obsoletes,
+                                    query_rfc_is_also,
+                                    query_rfc_see_also,
                                     query_rfc_not_issued,)
 from subprocess import run
 import sys
@@ -19,14 +19,14 @@ def get_docs(args):
     dne = []
     if args.updates:
         for number in numbers:
-            doc = query_rfc_by_updates(db_session, number)
+            doc = query_rfc_updates(db_session, number)
             if doc is not None:
                 docs.append(doc)
             else:
                 dne.append(choose_dne_string(db_session, number))
     elif args.obsoletes:
         for number in numbers:
-            rfc = query_rfc_by_obsoletes(db_session, number)
+            rfc = query_rfc_obsoletes(db_session, number)
             if rfc is not None:
                 docs.append(rfc)
             else:
@@ -37,11 +37,11 @@ def get_docs(args):
             if rfc is None:
                 dne.append(choose_dne_string(db_session, number))
             else:
-                aliases = query_rfc_by_is_also(db_session, number)
+                aliases = query_rfc_is_also(db_session, number)
                 docs.extend(aliases)
     elif args.see_also:
         for number in numbers:
-            reference = query_rfc_by_see_also(db_session, number)
+            reference = query_rfc_see_also(db_session, number)
             if reference is not None:
                 docs.append(reference)
             else:
