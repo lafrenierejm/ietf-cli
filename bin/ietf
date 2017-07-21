@@ -4,6 +4,7 @@ import ietf.cmd.author as author
 import ietf.cmd.bcp as bcp
 import ietf.cmd.mirror as mirror
 import ietf.cmd.rfc as rfc
+import ietf.cmd.std as std
 
 
 def main():
@@ -14,6 +15,7 @@ def main():
     bcp.add_subparser(subparsers)  # Add parser for `bcp` subcommand
     mirror.add_subparser(subparsers)  # Add parser for `mirror` subcommand
     rfc.add_subparser(subparsers)  # Add parser for `rfc` subcommand
+    std.add_subparser(subparsers)  # Add parser for `std` subcommand
     args = parser.parse_args()  # Parse the supplied arguments
     args.func(args)  # Run the specified (sub)command
 
