@@ -4,9 +4,9 @@ from ietf.utility.environment import (get_db_session, get_editor, get_file,
 from ietf.utility.query_doc import (query_rfc,
                                     query_rfc_updates,
                                     query_rfc_obsoletes,
-                                    query_rfc_is_also,
                                     query_rfc_see_also,
                                     query_rfc_not_issued,)
+from ietf.utility.query_is_also import (query_rfc_is_also,)
 from subprocess import run
 import sys
 
