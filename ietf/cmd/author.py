@@ -2,6 +2,7 @@
 from ietf.sql.rfc import Rfc
 from ietf.utility.environment import (get_editor, get_file, get_pager)
 from ietf.utility.query_author import (query_author_by_name,
+                                       query_author_by_org,
                                        query_author_by_title)
 from ietf.utility.query_doc import (get_db_session)
 from subprocess import run
@@ -18,6 +19,10 @@ def get_rfcs(args):
         query = query.intersect(query_author_by_name(Session, args.name))
     if args.title:
         query = query.intersect(query_author_by_title(Session, args.title))
+    if args.organization:
+        query = query.intersect(
+            query_author_by_org(Session, args.organization)
+        )
     # Run the assembled query
     rfcs = query.order_by(Rfc.id).all()
     show_docs(rfcs, args.editor, args.pager)  # Display found documents
@@ -84,6 +89,15 @@ def add_subparser(parent_parser):
         nargs='+',
         metavar=('TITLE'),
         help='query by author.title',
+    )
+
+    # Query by authors' organizations
+    parser.add_argument(
+        '-o', '--organization',
+        type=str,
+        nargs='+',
+        metavar=('ORG'),
+        help='query by author.organization',
     )
 
     # Pass arguments to `get_rfcs()`
