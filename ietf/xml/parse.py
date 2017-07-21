@@ -167,7 +167,7 @@ def find_keywords(entry: xml.etree.ElementTree.Element) -> List[str]:
                          findall('index:kw', NAMESPACE)
         for element in elements:
             if element.text:  # Do not add empty strings
-                keywords.append(element.text.strip())
+                keywords.append(element.text.strip().lower())
     except AttributeError:
         pass
     except:

@@ -3,6 +3,7 @@ import argparse
 import ietf.cmd.author as author
 import ietf.cmd.bcp as bcp
 import ietf.cmd.fyi as fyi
+import ietf.cmd.keyword as keyword
 import ietf.cmd.mirror as mirror
 import ietf.cmd.rfc as rfc
 import ietf.cmd.std as std
@@ -15,6 +16,7 @@ def main():
     author.add_subparser(subparsers)  # Add parser for `author` subcommand
     bcp.add_subparser(subparsers)  # Add parser for `bcp` subcommand
     fyi.add_subparser(subparsers)  # Add parser for `fyi` subcommand
+    keyword.add_subparser(subparsers)  # Add parser for `keyword` subcommand
     mirror.add_subparser(subparsers)  # Add parser for `mirror` subcommand
     rfc.add_subparser(subparsers)  # Add parser for `rfc` subcommand
     std.add_subparser(subparsers)  # Add parser for `std` subcommand
