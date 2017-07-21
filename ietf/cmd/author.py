@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 from ietf.sql.rfc import Rfc
-from ietf.utility.environment import (get_editor, get_file, get_pager)
+from ietf.utility.environment import (get_db_session, get_editor, get_file,
+                                      get_pager)
 from ietf.utility.query_author import (query_author_by_name,
                                        query_author_by_org,
                                        query_author_by_orgabbrev,
                                        query_author_by_title)
-from ietf.utility.query_doc import (get_db_session)
 from subprocess import run
 import sys
 

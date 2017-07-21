@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
+from ietf.sql.base import Base
 from ietf.sql.bcp import Bcp
 from ietf.sql.fyi import Fyi
 from ietf.sql.rfc import Rfc
 from ietf.sql.std import Std
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 from xdg import BaseDirectory
 import os
 import sys
@@ -32,6 +35,15 @@ def get_db_path(no_warn=False) -> str:
               .format(db_path))
         sys.exit(1)
     return db_path
+
+
+def get_db_session():
+    """Return a DB session."""
+    db_path = get_db_path()
+    engine = create_engine("sqlite:///{}".format(db_path))
+    Base.metadata.create_all(engine, checkfirst=True)
+    Session = sessionmaker(bind=engine)()
+    return Session
 
 
 def get_pager():

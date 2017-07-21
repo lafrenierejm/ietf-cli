@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-from ietf.utility.environment import (get_editor, get_file, get_pager)
-from ietf.utility.query_doc import (get_db_session, query_rfc,
+from ietf.utility.environment import (get_db_session, get_editor, get_file,
+                                      get_pager)
+from ietf.utility.query_doc import (query_rfc,
                                     query_rfc_by_updates,
                                     query_rfc_by_obsoletes,
                                     query_rfc_by_is_also,
