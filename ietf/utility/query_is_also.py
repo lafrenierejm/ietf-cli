@@ -1,4 +1,5 @@
 from ietf.sql.bcp import Bcp
+from ietf.sql.fyi import Fyi
 from ietf.sql.rfc import IsAlso, Rfc
 from ietf.sql.std import Std
 from ietf.utility.query_doc import (query_bcp, query_fyi, query_rfc,
@@ -17,6 +18,21 @@ def query_bcp_is_also(Session, number):
         rfc_aliases = query_rfc_is_also(Session, rfc.id)
         for doc in rfc_aliases:
             if (not isinstance(doc, Bcp)) or (doc.id != number):
+                docs.append(doc)
+    return docs
+
+
+def query_fyi_is_also(Session, number):
+    docs = []  # List of docs to return
+    rfcs = Session.query(Rfc).join(IsAlso).\
+        filter(IsAlso.doc_type == DocumentType.FYI).\
+        filter(IsAlso.doc_id == number).\
+        all()  # Returns a list
+    docs.extend(rfcs)  # Add rfcs to list
+    for rfc in rfcs:
+        rfc_aliases = query_rfc_is_also(Session, rfc.id)
+        for doc in rfc_aliases:
+            if (not isinstance(doc, Fyi)) or (doc.id != number):
                 docs.append(doc)
     return docs
 
