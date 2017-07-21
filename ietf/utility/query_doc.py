@@ -58,8 +58,8 @@ def query_rfc_see_also(session, number):
 def query_rfc_not_issued(session, number):
     """Return an RfcNotIssued object or None."""
     row = session.query(RfcNotIssued).\
-                  filter(RfcNotIssued.id == number).\
-                  one_or_none()
+        filter(RfcNotIssued.id == number).\
+        one_or_none()
     return row
 
 
